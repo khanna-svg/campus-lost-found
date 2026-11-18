@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+/tests
+/database/sql
+/storage/logs
+/.git
+.env
+.env.*
+!.env.example
+README.md
