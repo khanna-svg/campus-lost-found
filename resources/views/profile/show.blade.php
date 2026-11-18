@@ -19,12 +19,9 @@
                 @method('PUT')
 
                 <div class="grid gap-5 sm:grid-cols-2">
-                    <x-form.input name="email" label="Email" :value="$user->email" readonly hint="Managed by the administrator." />
+                    <x-form.input name="email" label="Institutional Email" :value="$user->email" readonly hint="Managed by the school administrator." />
                     <x-form.input name="role_label" label="Role" :value="$user->role->label()" readonly />
                 </div>
-                @if ($user->school_id)
-                    <x-form.input name="school_id" label="Student / employee ID" :value="$user->school_id" readonly />
-                @endif
 
                 <x-form.input name="name" label="Full name" :value="$user->name" autocomplete="name" required />
                 <div class="grid gap-5 sm:grid-cols-2">

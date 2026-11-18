@@ -37,9 +37,10 @@
                 </nav>
 
                 <div class="mt-6 border-t border-slate-800 pt-4">
-                    <p class="px-3 text-xs text-slate-500">Signed in as</p>
-                    <p class="truncate px-3 text-sm text-white">{{ auth()->user()->name }}</p>
-                    <form method="POST" action="{{ route('logout') }}" class="mt-2">
+                    <p class="px-3 text-[11px] font-medium uppercase tracking-wider text-slate-400">Institutional Account</p>
+                    <p class="truncate px-3 text-sm font-semibold text-white">{{ auth()->user()->name }}</p>
+                    <p class="truncate px-3 text-xs text-brand-300">{{ auth()->user()->email }}</p>
+                    <form method="POST" action="{{ route('logout') }}" class="mt-3">
                         @csrf
                         <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium hover:bg-slate-800 hover:text-white">Sign out</button>
                     </form>

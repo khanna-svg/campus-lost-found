@@ -6,20 +6,20 @@
     ];
 @endphp
 <x-layouts.base :title="$title">
-    <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
             <a href="{{ route('home') }}" class="flex items-center gap-2 font-semibold text-slate-900">
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
                 </span>
-                <span class="hidden sm:inline">{{ config('app.name') }}</span>
+                <span class="hidden font-bold tracking-tight sm:inline">{{ config('app.name') }}</span>
             </a>
 
             <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}"
                        @class([
-                           'rounded-lg px-3 py-2 text-sm font-medium',
+                           'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                            'bg-brand-50 text-brand-700' => request()->routeIs($item['match']),
                            'text-slate-600 hover:bg-slate-100 hover:text-slate-900' => ! request()->routeIs($item['match']),
                        ])
@@ -27,12 +27,61 @@
                 @endforeach
             </nav>
 
-            <div class="flex items-center gap-3">
-                <span class="hidden text-sm text-slate-600 sm:inline">{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}" class="hidden md:block">
-                    @csrf
-                    <button type="submit" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900">Sign out</button>
-                </form>
+            <div class="flex items-center gap-2">
+                {{-- User Profile Dropdown --}}
+                <div class="relative hidden md:block" id="user-menu-container">
+                    <button type="button"
+                            id="user-menu-button"
+                            data-dropdown-toggle="user-menu-dropdown"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            class="flex items-center gap-2.5 rounded-full p-1.5 text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </span>
+                        <div class="text-left leading-tight">
+                            <span class="block text-xs font-semibold text-slate-900">{{ auth()->user()->name }}</span>
+                            <span class="block text-[11px] text-slate-500">{{ auth()->user()->email }}</span>
+                        </div>
+                        <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <div id="user-menu-dropdown"
+                         class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-900/5 focus:outline-none"
+                         role="menu"
+                         aria-orientation="vertical"
+                         aria-labelledby="user-menu-button">
+                        <div class="border-b border-slate-100 px-3 py-2.5">
+                            <p class="text-xs font-medium text-slate-400">Institutional Account</p>
+                            <p class="truncate text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
+                            <p class="truncate text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
+                            <span class="mt-1.5 inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
+                                {{ auth()->user()->role->label() }}
+                            </span>
+                        </div>
+
+                        <div class="py-1">
+                            <a href="{{ route('profile.show') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900" role="menuitem">
+                                <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                                Account Profile
+                            </a>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-1">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50" role="menuitem">
+                                    <svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" /></svg>
+                                    Sign out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Mobile hamburger button --}}
                 <button type="button" data-nav-toggle="mobile-menu" aria-expanded="false" aria-controls="mobile-menu"
                         class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:hidden">
                     <span class="sr-only">Toggle menu</span>
@@ -41,14 +90,20 @@
             </div>
         </div>
 
+        {{-- Mobile dropdown menu --}}
         <div id="mobile-menu" class="hidden border-t border-slate-200 bg-white md:hidden">
-            <nav class="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3" aria-label="Mobile">
+            <div class="border-b border-slate-100 px-4 py-3 bg-slate-50">
+                <p class="text-xs font-medium text-slate-400">Institutional Account</p>
+                <p class="text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
+                <p class="text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
+            </div>
+            <nav class="flex flex-col gap-1 px-4 py-3" aria-label="Mobile">
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">{{ $item['label'] }}</a>
                 @endforeach
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-100">Sign out</button>
+                    <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50">Sign out</button>
                 </form>
             </nav>
         </div>

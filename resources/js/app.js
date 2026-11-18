@@ -22,3 +22,33 @@ document.querySelectorAll('[data-nav-toggle]').forEach((button) => {
         button.setAttribute('aria-expanded', String(open));
     });
 });
+
+/* ---------------------------------------------------------------
+ | Dropdown toggle: <button data-dropdown-toggle="id"> shows/hides #id
+ | Auto-closes when clicking outside or pressing Escape.
+ --------------------------------------------------------------- */
+document.querySelectorAll('[data-dropdown-toggle]').forEach((button) => {
+    const target = document.getElementById(button.dataset.dropdownToggle);
+    if (!target) return;
+
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = target.classList.toggle('hidden') === false;
+        button.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!target.classList.contains('hidden') && !target.contains(e.target) && !button.contains(e.target)) {
+            target.classList.add('hidden');
+            button.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !target.classList.contains('hidden')) {
+            target.classList.add('hidden');
+            button.setAttribute('aria-expanded', 'false');
+            button.focus();
+        }
+    });
+});
