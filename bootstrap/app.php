@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Middleware\EnsurePasswordIsChanged;
+use App\Http\Middleware\EnsureRole;
+use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 $app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,7 +15,18 @@ $app = Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Vercel (and most hosts) terminate HTTPS at a proxy; trust it so
+        // Laravel generates https:// links and secure cookies correctly.
+        $middleware->trustProxies(at: '*');
+
+        $middleware->alias([
+            'role' => EnsureRole::class,
+            'active' => EnsureUserIsActive::class,
+            'password.changed' => EnsurePasswordIsChanged::class,
+        ]);
+
+        // Already logged-in visitors of /login are sent to their own home page.
+        $middleware->redirectUsersTo(fn (Request $request) => route('home'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

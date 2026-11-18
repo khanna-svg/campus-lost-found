@@ -95,10 +95,8 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'require'),
-            // Supabase's transaction pooler (port 6543) does not support server-side
-            // prepared statements, so PDO must emulate them.
-            'options' => extension_loaded('pdo_pgsql') ? [
-                PDO::ATTR_EMULATE_PREPARES => (bool) env('DB_EMULATE_PREPARES', true),
+            'options' => extension_loaded('pdo_pgsql') && env('DB_EMULATE_PREPARES', false) ? [
+                PDO::ATTR_EMULATE_PREPARES => true,
             ] : [],
         ],
 

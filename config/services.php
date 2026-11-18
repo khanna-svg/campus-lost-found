@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'supabase' => [
+        'url' => rtrim((string) env('SUPABASE_URL'), '/'),
+        'service_role_key' => env('SUPABASE_SERVICE_ROLE_KEY'),
+        'photos_bucket' => env('SUPABASE_PHOTOS_BUCKET', 'item-photos'),
+        'evidence_bucket' => env('SUPABASE_EVIDENCE_BUCKET', 'claim-evidence'),
+    ],
+
 ];
