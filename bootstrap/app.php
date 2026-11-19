@@ -19,6 +19,11 @@ $app = Application::configure(basePath: dirname(__DIR__))
         // Laravel generates https:// links and secure cookies correctly.
         $middleware->trustProxies(at: '*');
 
+        $middleware->validateCsrfTokens(except: [
+            'login',
+            'logout',
+        ]);
+
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
         $middleware->alias([
@@ -31,7 +36,11 @@ $app = Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(fn (Request $request) => route('home'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your session expired. Please sign in again.',
+            ]);
+        });
     })->create();
 
 /*
@@ -42,11 +51,16 @@ $app = Application::configure(basePath: dirname(__DIR__))
 | On Vercel the project directory is READ-ONLY; only /tmp is writable (and it
 | is not shared between function instances). Laravel still needs a writable
 | storage folder for compiled views and temporary files, so we point it at /tmp.
-| Nothing important may live there: sessions/cache are in the database and
+| Nothing important may live there: sessions are in cookies and
 | uploads go to Supabase Storage.
 |
 */
-if (getenv('VERCEL') || getenv('APP_SERVERLESS') === 'true') {
+if (
+    isset($_ENV['VERCEL']) ||
+    getenv('VERCEL') ||
+    isset($_SERVER['VERCEL']) ||
+    getenv('APP_SERVERLESS') === 'true'
+) {
     $storage = '/tmp/storage';
 
     foreach (['app', 'framework/cache', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
