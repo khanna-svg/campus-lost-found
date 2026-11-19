@@ -13,7 +13,7 @@
             </nav>
             <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Claim Belonging</h1>
             <p class="mt-1 text-sm text-zinc-600">
-                Provide proof of ownership so campus security can verify and reunite you with your item.
+                Provide proof of ownership.
             </p>
         </div>
 
@@ -35,18 +35,7 @@
             </div>
         </div>
 
-        {{-- Verification Guidelines Callout --}}
-        <div class="rounded-2xl bg-zinc-100 border border-zinc-300 p-5">
-            <div class="flex gap-3">
-                <svg class="h-5 w-5 text-black shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                </svg>
-                <div class="space-y-1 text-xs leading-relaxed text-zinc-800">
-                    <strong class="font-bold block text-black">How Verification Works</strong>
-                    To safeguard student belongings against false claims, campus administrators match your description against confidential private characteristics recorded by the finder. Describe unique aspects that only the true owner would know.
-                </div>
-            </div>
-        </div>
+
 
         {{-- Claim Submission Form --}}
         <form method="POST" action="{{ route('claims.store') }}" enctype="multipart/form-data" class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 sm:p-8 space-y-6">
@@ -112,9 +101,7 @@
                        multiple
                        accept="image/jpeg,image/png,image/webp,application/pdf"
                        class="mt-2 block w-full text-xs text-zinc-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-900 hover:file:bg-zinc-200 cursor-pointer">
-                <p class="mt-1.5 text-[11px] text-zinc-500">
-                    Accepted: Original purchase receipt, warranty slip, photo of you with the item, or box barcode (JPG, PNG, WEBP, PDF up to 5MB each). Stored securely in private archives.
-                </p>
+
                 @error('evidence')
                     <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
                 @enderror
