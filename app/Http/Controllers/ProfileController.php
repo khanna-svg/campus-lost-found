@@ -12,19 +12,32 @@ class ProfileController extends Controller
 {
     public function show(Request $request): View
     {
-        return view('profile.show', ['user' => $request->user()]);
+        $user = $request->user() ?: auth()->user();
+        if (! $user) {
+            abort(403);
+        }
+
+        return view('profile.show', ['user' => $user]);
     }
 
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
-        $request->user()->update($request->validated());
+        $user = $request->user() ?: auth()->user();
+        if (! $user) {
+            abort(403);
+        }
+
+        $user->update($request->validated());
 
         return redirect()->route('profile.show')->with('success', 'Profile updated.');
     }
 
     public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
     {
-        $user = $request->user();
+        $user = $request->user() ?: auth()->user();
+        if (! $user) {
+            abort(403);
+        }
 
         $user->update(['password' => $request->validated('password')]);
         $user->forceFill(['must_change_password' => false])->saveQuietly();

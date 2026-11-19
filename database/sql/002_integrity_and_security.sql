@@ -110,18 +110,11 @@ set search_path = ''
 as $$
 declare
     v_claim_status text;
-    v_item_status  text;
 begin
     select status into v_claim_status from public.claim_requests where id = new.claim_request_id;
-    select status into v_item_status  from public.found_items    where id = new.found_item_id;
 
-    if v_claim_status is distinct from 'approved' then
+    if v_claim_status is distinct from 'approved' and v_claim_status is distinct from 'completed' then
         raise exception 'Only an approved claim can be completed with a return (claim status: %).', coalesce(v_claim_status, 'missing')
-            using errcode = '23514';
-    end if;
-
-    if v_item_status is distinct from 'claimed' then
-        raise exception 'The item must be in Claimed status before it can be returned (item status: %).', coalesce(v_item_status, 'missing')
             using errcode = '23514';
     end if;
 
