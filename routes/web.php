@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public / guest routes
+| Public / Guest Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn () => auth()->check() ? redirect()->route('home') : redirect()->route('login'));
+Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -25,27 +25,28 @@ Route::middleware('guest')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated routes (any role)
+| Authenticated Routes (Any Role)
 |--------------------------------------------------------------------------
 | auth             -> must be logged in
 | active           -> account must not be deactivated
-| password.changed -> admin-created accounts must first replace the temporary password
+| password.changed -> admin-created accounts must first replace temporary password
 */
 Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-    // Sends each role to its own home page.
-    Route::get('/home', fn () => redirect()->route(auth()->user()->isAdmin() ? 'admin.dashboard' : 'dashboard'))
-        ->name('home');
+    // Role-based home redirect
+    Route::get('/home', [DashboardController::class, 'home'])->name('home');
 
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    // Regular user dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Quick-action & navigation endpoints (full controllers implemented in Phases 6, 7, 8)
-    Route::get('/items', fn () => redirect()->route('dashboard')->with('info', 'Search and item discovery is being enabled in Phase 7.'))->name('items.index');
-    Route::get('/report-lost', fn () => redirect()->route('dashboard')->with('info', 'Lost item reporting form is being enabled in Phase 6.'))->name('lost-items.create');
-    Route::get('/report-found', fn () => redirect()->route('dashboard')->with('info', 'Found item reporting form is being enabled in Phase 6.'))->name('found-items.create');
-    Route::get('/my-claims', fn () => redirect()->route('dashboard')->with('info', 'Claim tracking is being enabled in Phase 8.'))->name('claims.index');
+    // Navigation & Quick Actions (Active placeholders until Phases 6, 7, 8)
+    Route::get('/items', [DashboardController::class, 'placeholderItems'])->name('items.index');
+    Route::get('/report-lost', [DashboardController::class, 'placeholderReportLost'])->name('lost-items.create');
+    Route::get('/report-found', [DashboardController::class, 'placeholderReportFound'])->name('found-items.create');
+    Route::get('/my-claims', [DashboardController::class, 'placeholderClaims'])->name('claims.index');
 
+    // Profile Management
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])
@@ -55,7 +56,7 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Administrator routes  (/admin/...)
+| Administrator Routes (/admin/...)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'active', 'password.changed', 'role:admin'])
