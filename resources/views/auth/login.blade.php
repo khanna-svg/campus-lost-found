@@ -1,30 +1,4 @@
 <x-layouts.guest title="Sign in">
-    <style>
-        .floating-badge-group {
-            position: relative;
-            margin-top: 0.5rem;
-        }
-        .floating-badge-label {
-            position: absolute;
-            left: 0.85rem;
-            top: 0.65rem;
-            font-size: 0.8125rem;
-            color: #71717a;
-            pointer-events: none;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
-        }
-        .floating-badge-input:focus ~ .floating-badge-label,
-        .floating-badge-input:not(:placeholder-shown) ~ .floating-badge-label,
-        .floating-badge-input:-webkit-autofill ~ .floating-badge-label {
-            top: -1.2rem;
-            left: 0.4rem;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #09090b;
-        }
-    </style>
-
     {{-- Brand Header --}}
     <div class="mb-5 text-center">
         <div class="flex items-center justify-center mb-2.5">
@@ -61,61 +35,61 @@
     @endif
 
     {{-- Sign In Form --}}
-    <form method="POST" action="{{ route('login') }}" class="space-y-3.5" novalidate>
+    <form method="POST" action="{{ route('login') }}" class="space-y-4" novalidate>
         @csrf
 
-        {{-- Floating Email Input --}}
-        <div class="floating-badge-group">
+        {{-- Email Field --}}
+        <div>
+            <label for="email" class="block text-xs font-semibold text-zinc-700 mb-1.5 ml-0.5">
+                Email
+            </label>
             <input 
                 id="email" 
                 name="email" 
                 type="email" 
                 value="{{ old('email') }}" 
-                placeholder=" "
+                placeholder="student@school.edu"
                 required 
                 autofocus 
                 autocomplete="email"
-                class="floating-badge-input block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
-            <label 
-                for="email" 
-                class="floating-badge-label">
-                Email
-            </label>
+                class="block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
         </div>
 
-        {{-- Floating Password Input with Toggle --}}
-        <div class="floating-badge-group">
-            <input 
-                id="password" 
-                name="password" 
-                type="password" 
-                placeholder=" " 
-                required 
-                autocomplete="current-password"
-                class="floating-badge-input block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 pr-10 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
-            <label 
-                for="password" 
-                class="floating-badge-label">
+        {{-- Password Field with Eye Toggle --}}
+        <div>
+            <label for="password" class="block text-xs font-semibold text-zinc-700 mb-1.5 ml-0.5">
                 Password
             </label>
-            <button 
-                type="button" 
-                onclick="togglePasswordVisibility()" 
-                title="Show/Hide Password"
-                class="absolute right-2.5 top-2 text-zinc-400 hover:text-black transition p-1 cursor-pointer z-10">
-                <svg id="passwordEyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            </button>
+            <div class="relative">
+                <input 
+                    id="password" 
+                    name="password" 
+                    type="password" 
+                    placeholder="••••••••" 
+                    required 
+                    autocomplete="current-password"
+                    class="block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 pr-10 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
+                <button 
+                    type="button" 
+                    onclick="togglePasswordVisibility()" 
+                    title="Show/Hide Password"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black transition p-1 cursor-pointer z-10 flex items-center justify-center">
+                    <svg id="passwordEyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         {{-- Submit Button --}}
-        <button 
-            type="submit" 
-            class="w-full rounded-xl bg-black hover:bg-zinc-800 py-2.5 text-xs sm:text-sm font-semibold text-white transition shadow-sm flex items-center justify-center gap-2 cursor-pointer mt-1">
-            <span>Sign in</span>
-        </button>
+        <div class="pt-0.5">
+            <button 
+                type="submit" 
+                class="w-full rounded-xl bg-black hover:bg-zinc-800 py-2.5 text-xs sm:text-sm font-semibold text-white transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                <span>Sign in</span>
+            </button>
+        </div>
     </form>
 
     @if (config('campus.auth_mode') === 'self_register')
