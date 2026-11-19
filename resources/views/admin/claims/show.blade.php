@@ -51,20 +51,6 @@
                         <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-1">Description</span>
                         <p class="text-xs text-zinc-700 bg-zinc-50 p-3.5 rounded-2xl border border-zinc-100 whitespace-pre-line">{{ $claim->foundItem->public_description }}</p>
                     </div>
-
-                    {{-- Finder's Confidential Identifying Details --}}
-                    <div class="rounded-2xl bg-zinc-50 p-4 border border-zinc-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-700 block">Finder's Confidential Details</span>
-                            <span class="rounded bg-zinc-200 px-2 py-0.5 text-[9px] font-bold text-zinc-800">Compare Against Proof</span>
-                        </div>
-                        <p class="text-xs text-zinc-800 font-medium whitespace-pre-line leading-relaxed">{{ $claim->foundItem->private_details }}</p>
-                        @if ($claim->foundItem->remarks)
-                            <p class="text-[11px] text-zinc-500 pt-2 border-t border-zinc-200">
-                                <strong>Remarks:</strong> {{ $claim->foundItem->remarks }}
-                            </p>
-                        @endif
-                    </div>
                 </div>
             </div>
 
