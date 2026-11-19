@@ -65,6 +65,11 @@ class FoundItem extends Model
         return $this->hasMany(ClaimRequest::class, 'found_item_id');
     }
 
+    public function itemReturn(): HasOne
+    {
+        return $this->hasOne(ItemReturn::class, 'found_item_id');
+    }
+
     /**
      * Helper to get public photo URL from Supabase Storage bucket.
      */

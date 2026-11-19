@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ClaimRequestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemDiscoveryController;
@@ -56,8 +57,14 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     // Item Discovery & Search (Module 4 - Phase 7)
     Route::get('/items', [ItemDiscoveryController::class, 'index'])->name('items.index');
 
-    // Claim Tracking (Module 5 - Phase 8)
-    Route::get('/my-claims', [DashboardController::class, 'placeholderClaims'])->name('claims.index');
+    // Claim Workflow & Tracking (Module 5 - Phase 8)
+    Route::get('/found-items/{foundItem}/claim', [ClaimRequestController::class, 'create'])->name('claims.create');
+    Route::post('/claims', [ClaimRequestController::class, 'store'])->name('claims.store')->middleware('throttle:10,1');
+    Route::get('/my-claims', [ClaimRequestController::class, 'index'])->name('claims.index');
+    Route::get('/my-claims/{claim}', [ClaimRequestController::class, 'show'])->name('claims.show');
+    Route::post('/my-claims/{claim}/respond', [ClaimRequestController::class, 'respond'])
+        ->middleware('throttle:10,1')
+        ->name('claims.respond');
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

@@ -94,7 +94,7 @@
                             <h3 class="text-sm font-bold text-emerald-900">Recognize this item as yours?</h3>
                             <p class="text-xs text-emerald-700">Submit a claim request with ownership proof to recover your item through campus security.</p>
                         </div>
-                        <a href="{{ route('claims.index') }}"
+                        <a href="{{ route('claims.create', $foundItem) }}"
                            class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 shrink-0 transition">
                             Submit Claim Request
                         </a>

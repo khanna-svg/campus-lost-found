@@ -66,4 +66,33 @@ class ClaimRequest extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    public function itemReturn(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ItemReturn::class, 'claim_request_id');
+    }
+
+    /**
+     * Generate temporary signed URLs for the claimant and admin to view evidence photos.
+     *
+     * @return array<int, string>
+     */
+    public function getEvidenceUrlsAttribute(): array
+    {
+        if (empty($this->evidence_paths) || ! is_array($this->evidence_paths)) {
+            return [];
+        }
+
+        $storage = app(\App\Services\SupabaseStorageService::class);
+        $urls = [];
+
+        foreach ($this->evidence_paths as $path) {
+            $signed = $storage->signedUrl($path, 3600);
+            if ($signed) {
+                $urls[] = $signed;
+            }
+        }
+
+        return $urls;
+    }
 }

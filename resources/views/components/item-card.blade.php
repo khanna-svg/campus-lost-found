@@ -113,7 +113,7 @@
         </a>
 
         @if ($isFound && $item->status === 'approved')
-            <a href="{{ $detailRoute }}"
+            <a href="{{ route('claims.create', $item->id) }}"
                class="rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 transition">
                 Claim Item
             </a>
