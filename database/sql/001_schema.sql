@@ -261,6 +261,8 @@ create table public.item_returns (
     found_item_id     uuid not null unique references public.found_items (id) on delete restrict, -- an item is returned once
     recorded_by       uuid not null references public.users (id) on delete restrict,              -- admin who confirmed
     returned_to_name  varchar(150) not null,
+    lrn               varchar(100),
+    course_year       varchar(100),
     id_presented      varchar(100),                      -- e.g. "School ID"
     notes             text,
     returned_at       timestamptz not null default now(),

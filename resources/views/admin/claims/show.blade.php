@@ -128,24 +128,72 @@
                             @csrf
                             <div>
                                 <h4 class="text-sm font-bold text-white">Record Physical Return (Handover)</h4>
-                                <p class="text-xs text-zinc-400">Complete this when the student presents their School ID in the Admin Office to retrieve the item.</p>
+                                <p class="text-xs text-zinc-400">Complete this when the student retrieves the item in the Admin Office.</p>
                             </div>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="space-y-2.5 text-xs">
                                 <div>
-                                    <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1">ID Type</label>
-                                    <input type="text" name="identification_type" value="Student ID" class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-2.5 py-1.5 text-xs text-white" required>
+                                    <label for="returned_to_name" class="block text-[10px] uppercase font-bold text-zinc-400 mb-1">Student's Name</label>
+                                    <input type="text"
+                                           name="returned_to_name"
+                                           id="returned_to_name"
+                                           value="{{ old('returned_to_name', $claim->claimant->name) }}"
+                                           placeholder="Student's Name"
+                                           class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-white"
+                                           required>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold text-zinc-400 mb-1">Reference No.</label>
-                                    <input type="text" name="id_reference_number" value="Verified in Office" class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-2.5 py-1.5 text-xs text-white" required>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label for="lrn" class="block text-[10px] uppercase font-bold text-zinc-400 mb-1">LRN</label>
+                                        <input type="text"
+                                               name="lrn"
+                                               id="lrn"
+                                               value="{{ old('lrn', $claim->claimant->school_id) }}"
+                                               placeholder="Learner Reference No."
+                                               class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-white"
+                                               required>
+                                    </div>
+                                    <div>
+                                        <label for="course_year" class="block text-[10px] uppercase font-bold text-zinc-400 mb-1">Course &amp; Year</label>
+                                        <input type="text"
+                                               name="course_year"
+                                               id="course_year"
+                                               value="{{ old('course_year') }}"
+                                               placeholder="e.g. BSIT 4A"
+                                               class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-white"
+                                               required>
+                                    </div>
                                 </div>
                             </div>
                             <button type="submit"
                                     onclick="return confirm('Confirm item handover?');"
-                                    class="w-full rounded-xl bg-white px-4 py-2 text-xs font-bold text-black hover:bg-zinc-100 transition">
-                                Hand Over &amp; Complete Return
+                                    class="w-full rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-black hover:bg-zinc-100 transition">
+                                Hand over
                             </button>
                         </form>
+                    @endif
+
+                    @if ($claim->status->value === 'completed' && $claim->itemReturn)
+                        <div class="rounded-2xl bg-zinc-50 p-4 border border-zinc-200 space-y-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 block">✓ Item Handed Over &amp; Returned</span>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-zinc-700 pt-1">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Received By</span>
+                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_to_name }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">LRN</span>
+                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->lrn ?? ($claim->itemReturn->id_presented ?? 'N/A') }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Course &amp; Year</span>
+                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->course_year ?? 'N/A' }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Handover Date</span>
+                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_at->format('M d, Y h:i A') }}</span>
+                                </div>
+                            </div>
+                        </div>
                     @endif
 
                     {{-- 3. Reject Claim Form --}}

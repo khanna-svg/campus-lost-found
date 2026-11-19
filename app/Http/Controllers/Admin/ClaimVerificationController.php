@@ -149,7 +149,8 @@ class ClaimVerificationController extends Controller
     {
         $validated = $request->validate([
             'returned_to_name' => ['required', 'string', 'max:150'],
-            'id_presented' => ['nullable', 'string', 'max:100'],
+            'lrn' => ['required', 'string', 'max:100'],
+            'course_year' => ['required', 'string', 'max:100'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -160,8 +161,10 @@ class ClaimVerificationController extends Controller
                 'found_item_id' => $claim->found_item_id,
                 'recorded_by' => $request->user()->id,
                 'returned_to_name' => $validated['returned_to_name'],
-                'id_presented' => $validated['id_presented'] ?? 'Institutional ID',
-                'notes' => $validated['notes'] ?? null,
+                'lrn' => $validated['lrn'],
+                'course_year' => $validated['course_year'],
+                'id_presented' => 'LRN: ' . $validated['lrn'],
+                'notes' => $validated['notes'] ?? ('Course & Year: ' . $validated['course_year']),
                 'returned_at' => now(),
             ]);
 

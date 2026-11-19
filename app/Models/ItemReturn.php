@@ -16,6 +16,8 @@ class ItemReturn extends Model
         'found_item_id',
         'recorded_by',
         'returned_to_name',
+        'lrn',
+        'course_year',
         'id_presented',
         'notes',
         'returned_at',

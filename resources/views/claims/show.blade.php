@@ -152,17 +152,21 @@
                     </div>
                 </div>
                 @if ($claim->itemReturn)
-                    <div class="grid sm:grid-cols-3 gap-2 pt-2 border-t border-zinc-800 text-xs">
+                    <div class="grid sm:grid-cols-4 gap-2 pt-2 border-t border-zinc-800 text-xs">
                         <div>
                             <span class="text-zinc-400 block text-[11px]">Received By</span>
                             <span class="font-semibold text-white">{{ $claim->itemReturn->returned_to_name }}</span>
                         </div>
                         <div>
-                            <span class="text-zinc-400 block text-[11px]">ID Verified</span>
-                            <span class="font-semibold text-white">{{ $claim->itemReturn->id_presented ?? 'Institutional ID' }}</span>
+                            <span class="text-zinc-400 block text-[11px]">LRN</span>
+                            <span class="font-semibold text-white">{{ $claim->itemReturn->lrn ?? ($claim->itemReturn->id_presented ?? 'N/A') }}</span>
                         </div>
                         <div>
-                            <span class="text-zinc-400 block text-[11px]">Date & Time</span>
+                            <span class="text-zinc-400 block text-[11px]">Course &amp; Year</span>
+                            <span class="font-semibold text-white">{{ $claim->itemReturn->course_year ?? 'N/A' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-zinc-400 block text-[11px]">Date &amp; Time</span>
                             <span class="font-semibold text-white">{{ $claim->itemReturn->returned_at->format('M d, Y h:i A') }}</span>
                         </div>
                     </div>

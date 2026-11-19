@@ -230,17 +230,11 @@
                                     <td class="py-3 text-zinc-500">
                                         {{ $approved->approved_at ? $approved->approved_at->format('M d, Y h:i A') : 'Recently' }}
                                     </td>
-                                    <td class="py-3">
-                                        <form method="POST" action="{{ route('admin.claims.record-return', $approved) }}" class="inline">
-                                            @csrf
-                                            <input type="hidden" name="identification_type" value="Student ID">
-                                            <input type="hidden" name="id_reference_number" value="Verified in Office">
-                                            <button type="submit"
-                                                    onclick="return confirm('Confirm physical handover to {{ addslashes($approved->claimant->name) }} with verified ID?');"
-                                                    class="rounded-lg bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition">
-                                                Mark Picked Up / Handed Over
-                                            </button>
-                                        </form>
+                                    <td class="py-3 text-right">
+                                        <a href="{{ route('admin.claims.show', $approved) }}"
+                                           class="inline-flex items-center gap-1.5 rounded-lg bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition">
+                                            Hand over
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
