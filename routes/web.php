@@ -40,6 +40,12 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
 
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+    // Quick-action & navigation endpoints (full controllers implemented in Phases 6, 7, 8)
+    Route::get('/items', fn () => redirect()->route('dashboard')->with('info', 'Search and item discovery is being enabled in Phase 7.'))->name('items.index');
+    Route::get('/report-lost', fn () => redirect()->route('dashboard')->with('info', 'Lost item reporting form is being enabled in Phase 6.'))->name('lost-items.create');
+    Route::get('/report-found', fn () => redirect()->route('dashboard')->with('info', 'Found item reporting form is being enabled in Phase 6.'))->name('found-items.create');
+    Route::get('/my-claims', fn () => redirect()->route('dashboard')->with('info', 'Claim tracking is being enabled in Phase 8.'))->name('claims.index');
+
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])

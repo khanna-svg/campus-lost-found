@@ -2,7 +2,10 @@
 @php
     $nav = [
         ['label' => 'Dashboard', 'route' => 'dashboard', 'match' => 'dashboard'],
-        ['label' => 'Profile', 'route' => 'profile.show', 'match' => 'profile.*'],
+        ['label' => 'Browse Items', 'route' => 'items.index', 'match' => 'items.*'],
+        ['label' => 'Report Lost', 'route' => 'lost-items.create', 'match' => 'lost-items.*'],
+        ['label' => 'Report Found', 'route' => 'found-items.create', 'match' => 'found-items.*'],
+        ['label' => 'My Claims', 'route' => 'claims.index', 'match' => 'claims.*'],
     ];
 @endphp
 <x-layouts.base :title="$title">
@@ -15,7 +18,7 @@
                 <span class="hidden font-bold tracking-tight sm:inline">{{ config('app.name') }}</span>
             </a>
 
-            <nav class="hidden items-center gap-1 md:flex" aria-label="Main">
+            <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}"
                        @class([
@@ -29,7 +32,7 @@
 
             <div class="flex items-center gap-2">
                 {{-- User Profile Dropdown --}}
-                <div class="relative hidden md:block" id="user-menu-container">
+                <div class="relative hidden sm:block" id="user-menu-container">
                     <button type="button"
                             id="user-menu-button"
                             data-dropdown-toggle="user-menu-dropdown"
@@ -39,7 +42,7 @@
                         <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </span>
-                        <div class="text-left leading-tight">
+                        <div class="text-left leading-tight hidden md:block">
                             <span class="block text-xs font-semibold text-slate-900">{{ auth()->user()->name }}</span>
                             <span class="block text-[11px] text-slate-500">{{ auth()->user()->email }}</span>
                         </div>
@@ -49,12 +52,12 @@
                     </button>
 
                     <div id="user-menu-dropdown"
-                         class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-900/5 focus:outline-none"
+                         class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-900/5 focus:outline-none z-50"
                          role="menu"
                          aria-orientation="vertical"
                          aria-labelledby="user-menu-button">
                         <div class="border-b border-slate-100 px-3 py-2.5">
-                            <p class="text-xs font-medium text-slate-400">Institutional Account</p>
+                            <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Institutional Account</p>
                             <p class="truncate text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
                             <p class="truncate text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
                             <span class="mt-1.5 inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
@@ -83,7 +86,7 @@
 
                 {{-- Mobile hamburger button --}}
                 <button type="button" data-nav-toggle="mobile-menu" aria-expanded="false" aria-controls="mobile-menu"
-                        class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:hidden">
+                        class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden">
                     <span class="sr-only">Toggle menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
@@ -91,9 +94,9 @@
         </div>
 
         {{-- Mobile dropdown menu --}}
-        <div id="mobile-menu" class="hidden border-t border-slate-200 bg-white md:hidden">
+        <div id="mobile-menu" class="hidden border-t border-slate-200 bg-white lg:hidden">
             <div class="border-b border-slate-100 px-4 py-3 bg-slate-50">
-                <p class="text-xs font-medium text-slate-400">Institutional Account</p>
+                <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Institutional Account</p>
                 <p class="text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
                 <p class="text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
             </div>
@@ -101,7 +104,8 @@
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">{{ $item['label'] }}</a>
                 @endforeach
-                <form method="POST" action="{{ route('logout') }}">
+                <a href="{{ route('profile.show') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Account Profile</a>
+                <form method="POST" action="{{ route('logout') }}" class="pt-1 border-t border-slate-100">
                     @csrf
                     <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50">Sign out</button>
                 </form>

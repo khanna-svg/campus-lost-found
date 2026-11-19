@@ -52,3 +52,32 @@ document.querySelectorAll('[data-dropdown-toggle]').forEach((button) => {
         }
     });
 });
+
+/* ---------------------------------------------------------------
+ | Tab switcher: <button data-tab-target="tab-id">
+ --------------------------------------------------------------- */
+document.querySelectorAll('[data-tab-target]').forEach((tab) => {
+    tab.addEventListener('click', () => {
+        const targetId = tab.dataset.tabTarget;
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        const parent = tab.closest('[role="tablist"]');
+        if (parent) {
+            parent.querySelectorAll('[data-tab-target]').forEach((sibling) => {
+                sibling.setAttribute('aria-selected', 'false');
+                sibling.classList.remove('bg-white', 'text-brand-700', 'shadow-sm', 'font-semibold');
+                sibling.classList.add('text-slate-600', 'font-medium');
+
+                const siblingTarget = document.getElementById(sibling.dataset.tabTarget);
+                if (siblingTarget) siblingTarget.classList.add('hidden');
+            });
+        }
+
+        tab.setAttribute('aria-selected', 'true');
+        tab.classList.add('bg-white', 'text-brand-700', 'shadow-sm', 'font-semibold');
+        tab.classList.remove('text-slate-600', 'font-medium');
+
+        targetEl.classList.remove('hidden');
+    });
+});

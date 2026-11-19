@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -74,5 +75,20 @@ class User extends Authenticatable
     public function isUser(): bool
     {
         return $this->role === UserRole::User;
+    }
+
+    public function lostItems(): HasMany
+    {
+        return $this->hasMany(LostItem::class);
+    }
+
+    public function foundItems(): HasMany
+    {
+        return $this->hasMany(FoundItem::class);
+    }
+
+    public function claimRequests(): HasMany
+    {
+        return $this->hasMany(ClaimRequest::class, 'claimant_id');
     }
 }
