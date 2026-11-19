@@ -10,6 +10,7 @@
         'sm' => 'h-6 w-6',
         'md' => 'h-8 w-8',
         'lg' => 'h-11 w-11',
+        'xl' => 'h-14 w-14 sm:h-16 sm:w-16',
         default => 'h-8 w-8',
     };
 @endphp
