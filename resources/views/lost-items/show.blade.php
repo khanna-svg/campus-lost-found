@@ -4,6 +4,8 @@
             <nav class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-2">
                 <a href="{{ route('dashboard') }}" class="hover:text-slate-700">Dashboard</a>
                 <span>/</span>
+                <a href="{{ route('items.index') }}" class="hover:text-slate-700">Browse Items</a>
+                <span>/</span>
                 <span class="text-slate-900">Lost Item Report</span>
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -91,9 +93,12 @@
             </div>
         </div>
 
-        <div class="flex justify-end pt-4">
-            <a href="{{ route('dashboard') }}" class="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50">
-                Back to Dashboard
+        <div class="flex items-center justify-between pt-4">
+            <a href="{{ route('items.index') }}" class="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50">
+                ← Back to Directory
+            </a>
+            <a href="{{ route('dashboard') }}" class="text-xs text-slate-500 hover:text-slate-800">
+                Go to Dashboard
             </a>
         </div>
     </div>

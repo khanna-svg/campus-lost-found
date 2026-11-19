@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoundItemController;
+use App\Http\Controllers\ItemDiscoveryController;
 use App\Http\Controllers\LostItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -52,8 +53,10 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     Route::post('/found-items', [FoundItemController::class, 'store'])->name('found-items.store');
     Route::get('/found-items/{foundItem}', [FoundItemController::class, 'show'])->name('found-items.show');
 
-    // Active placeholders until Phases 7, 8
-    Route::get('/items', [DashboardController::class, 'placeholderItems'])->name('items.index');
+    // Item Discovery & Search (Module 4 - Phase 7)
+    Route::get('/items', [ItemDiscoveryController::class, 'index'])->name('items.index');
+
+    // Claim Tracking (Module 5 - Phase 8)
     Route::get('/my-claims', [DashboardController::class, 'placeholderClaims'])->name('claims.index');
 
     // Profile Management
