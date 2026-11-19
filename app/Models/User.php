@@ -91,4 +91,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ClaimRequest::class, 'claimant_id');
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(AppNotification::class, 'user_id');
+    }
+
+    public function unreadNotifications(): HasMany
+    {
+        return $this->hasMany(AppNotification::class, 'user_id')->whereNull('read_at');
+    }
 }

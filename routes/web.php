@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoundItemController;
 use App\Http\Controllers\ItemDiscoveryController;
 use App\Http\Controllers\LostItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     Route::post('/my-claims/{claim}/respond', [ClaimRequestController::class, 'respond'])
         ->middleware('throttle:10,1')
         ->name('claims.respond');
+
+    // In-App Notification System (Module 6 - Phase 9)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

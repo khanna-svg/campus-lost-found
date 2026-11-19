@@ -76,7 +76,11 @@ class ClaimRequestController extends Controller
     /**
      * Store newly submitted claim with proof description and optional private evidence.
      */
-    public function store(StoreClaimRequest $request, SupabaseStorageService $storage): RedirectResponse
+    public function store(
+        StoreClaimRequest $request,
+        SupabaseStorageService $storage,
+        \App\Services\NotificationService $notifications
+    ): RedirectResponse
     {
         $evidencePaths = [];
 
@@ -96,6 +100,9 @@ class ClaimRequestController extends Controller
             'evidence_paths' => $evidencePaths,
             'status' => ClaimRequestStatus::Pending,
         ]);
+
+        // Notify admins of new claim
+        $notifications->claimReceived($claim);
 
         return redirect()->route('claims.show', $claim)
             ->with('success', 'Your ownership claim has been submitted. Campus administrators will verify your proof.');
