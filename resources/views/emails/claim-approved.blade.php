@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Campus Lost &amp; Found</h1>
+            <h1>CampusBeacon</h1>
         </div>
         <div class="body">
             <span class="badge">Claim Approved · Ready for Pickup</span>
@@ -55,7 +55,7 @@
             </p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} Campus Lost &amp; Found Central Portal. All rights reserved.
+            &copy; {{ date('Y') }} CampusBeacon Central Portal. All rights reserved.
         </div>
     </div>
 </body>

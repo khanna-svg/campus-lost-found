@@ -15,11 +15,18 @@ class DashboardController extends Controller
 {
     /**
      * Entry point for root URL '/'.
-     * Displays simple, clean campus landing page.
+     * Directly redirects to Browse Item Directory (or Admin Dashboard if admin).
      */
-    public function welcome(): View
+    public function welcome(Request $request): RedirectResponse
     {
-        return view('welcome');
+        /** @var User|null $user */
+        $user = $request->user();
+
+        if ($user && $user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('items.index');
     }
 
     /**

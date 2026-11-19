@@ -7,14 +7,12 @@ use Tests\TestCase;
 class ExampleTest extends TestCase
 {
     /**
-     * Guest visiting root should view the landing page.
+     * Guest visiting root should be redirected directly to Browse Directory.
      */
-    public function test_guest_can_view_landing_page(): void
+    public function test_guest_is_redirected_to_browse_items(): void
     {
         $response = $this->get('/');
 
-        $response->assertOk();
-        $response->assertSee('Find what you’ve lost');
-        $response->assertSee('Browse Directory');
+        $response->assertRedirect('/items');
     }
 }
