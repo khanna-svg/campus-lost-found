@@ -84,6 +84,18 @@ class FoundItemController extends Controller
         } else {
             $foundItem->status = FoundItemStatus::Returned;
             $foundItem->save();
+
+            // If an approved claim exists for this item, complete it as well
+            $approvedClaim = $foundItem->claimRequests()
+                ->where('status', \App\Enums\ClaimRequestStatus::Approved)
+                ->first();
+            if ($approvedClaim) {
+                $approvedClaim->update([
+                    'status' => \App\Enums\ClaimRequestStatus::Completed,
+                    'completed_at' => now(),
+                ]);
+            }
+
             $message = 'Item marked as resolved (returned to rightful owner)!';
         }
 

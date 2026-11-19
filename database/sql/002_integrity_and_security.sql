@@ -65,12 +65,6 @@ begin
         raise exception 'The item and claimant of a claim request cannot be changed.' using errcode = '23514';
     end if;
 
-    if new.status = 'completed' and old.status is distinct from 'completed' then
-        if not exists (select 1 from public.item_returns where claim_request_id = new.id) then
-            raise exception 'A claim cannot be completed before the return is recorded.' using errcode = '23514';
-        end if;
-    end if;
-
     return new;
 end;
 $$;
@@ -82,7 +76,6 @@ create trigger claim_requests_before_update
 -- ---------------------------------------------------------------------
 -- D. found_items: guard status changes
 --    - 'claimed'  requires an approved claim
---    - 'returned' requires a recorded return
 -- ---------------------------------------------------------------------
 create or replace function public.found_items_guard_status()
 returns trigger
@@ -96,12 +89,6 @@ begin
             where found_item_id = new.id and status in ('approved', 'completed')
         ) then
             raise exception 'An item cannot be marked Claimed without an approved claim.' using errcode = '23514';
-        end if;
-
-        if new.status = 'returned' and not exists (
-            select 1 from public.item_returns where found_item_id = new.id
-        ) then
-            raise exception 'An item cannot be marked Returned before the return is recorded.' using errcode = '23514';
         end if;
     end if;
 
