@@ -18,18 +18,16 @@
             <div class="hidden md:block w-full h-2"></div>
 
             <!-- Main Form Container -->
-            <main class="w-full max-w-sm sm:max-w-md my-auto">
+            <main class="w-full max-w-[340px] my-auto">
                 {{ $slot }}
             </main>
 
             <!-- Footer -->
-            <footer class="w-full text-center text-xs text-zinc-400 py-4">
-                @isset($footer)
+            @isset($footer)
+                <footer class="w-full text-center text-xs text-zinc-400 py-4">
                     {{ $footer }}
-                @else
-                    <p>© {{ date('Y') }} • CampusBeacon</p>
-                @endisset
-            </footer>
+                </footer>
+            @endisset
         </div>
     </div>
 </x-layouts.base>

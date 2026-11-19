@@ -2,13 +2,13 @@
     <style>
         .floating-badge-group {
             position: relative;
-            margin-top: 0.65rem;
+            margin-top: 0.5rem;
         }
         .floating-badge-label {
             position: absolute;
-            left: 1rem;
-            top: 0.85rem;
-            font-size: 0.875rem;
+            left: 0.85rem;
+            top: 0.65rem;
+            font-size: 0.8125rem;
             color: #71717a;
             pointer-events: none;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -17,32 +17,32 @@
         .floating-badge-input:focus ~ .floating-badge-label,
         .floating-badge-input:not(:placeholder-shown) ~ .floating-badge-label,
         .floating-badge-input:-webkit-autofill ~ .floating-badge-label {
-            top: -1.35rem;
-            left: 0.5rem;
-            font-size: 0.75rem;
+            top: -1.2rem;
+            left: 0.4rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #09090b;
         }
     </style>
 
     {{-- Brand Header --}}
-    <div class="mb-6 sm:mb-8 text-center">
-        <div class="flex items-center justify-center mb-3">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white p-2 shadow-md border border-zinc-200/80 flex items-center justify-center">
-                <x-brand-logo size="xl" :with-text="false" />
+    <div class="mb-5 text-center">
+        <div class="flex items-center justify-center mb-2.5">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-2 shadow-sm border border-zinc-200/80 flex items-center justify-center">
+                <x-brand-logo size="lg" :with-text="false" />
             </div>
         </div>
-        <h1 class="text-3xl sm:text-4xl font-black text-zinc-900 tracking-wider font-sans">
+        <h1 class="text-2xl sm:text-3xl font-black text-zinc-900 tracking-tight font-sans">
             CampusBeacon
         </h1>
-        <p class="mt-1 text-xs sm:text-sm text-zinc-500 font-semibold tracking-wide">
-            Find It, Return It
+        <p class="mt-0.5 text-xs text-zinc-500 font-medium tracking-wide">
+            Campus Lost &amp; Found
         </p>
     </div>
 
     {{-- Flash Notifications --}}
     @if (session('status'))
-        <div class="mb-5 rounded-2xl border border-emerald-300 bg-emerald-50 p-3.5 text-xs sm:text-sm text-emerald-800 flex items-center gap-2">
+        <div class="mb-4 rounded-xl border border-emerald-300 bg-emerald-50 p-2.5 text-xs text-emerald-800 flex items-center gap-2">
             <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -52,7 +52,7 @@
 
     {{-- Validation Error Banner --}}
     @if ($errors->any())
-        <div class="mb-5 rounded-2xl border border-red-300 bg-red-50 p-3.5 text-xs sm:text-sm text-red-800 flex items-start gap-2">
+        <div class="mb-4 rounded-xl border border-red-300 bg-red-50 p-2.5 text-xs text-red-800 flex items-start gap-2">
             <svg class="w-4 h-4 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
@@ -61,7 +61,7 @@
     @endif
 
     {{-- Sign In Form --}}
-    <form method="POST" action="{{ route('login') }}" class="space-y-4 sm:space-y-5" novalidate>
+    <form method="POST" action="{{ route('login') }}" class="space-y-3.5" novalidate>
         @csrf
 
         {{-- Floating Email Input --}}
@@ -75,7 +75,7 @@
                 required 
                 autofocus 
                 autocomplete="email"
-                class="floating-badge-input block w-full rounded-2xl border border-slate-300 bg-slate-50/70 px-4 py-3 text-xs sm:text-sm text-slate-900 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/15 transition-all shadow-2xs">
+                class="floating-badge-input block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
             <label 
                 for="email" 
                 class="floating-badge-label">
@@ -92,7 +92,7 @@
                 placeholder=" " 
                 required 
                 autocomplete="current-password"
-                class="floating-badge-input block w-full rounded-2xl border border-slate-300 bg-slate-50/70 px-4 pr-11 py-3 text-xs sm:text-sm text-slate-900 outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-black/15 transition-all shadow-2xs">
+                class="floating-badge-input block w-full rounded-xl border border-zinc-300 bg-zinc-50/70 px-3.5 pr-10 py-2.5 text-xs sm:text-sm text-zinc-900 outline-none focus:bg-white focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs">
             <label 
                 for="password" 
                 class="floating-badge-label">
@@ -102,8 +102,8 @@
                 type="button" 
                 onclick="togglePasswordVisibility()" 
                 title="Show/Hide Password"
-                class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-black transition p-1 cursor-pointer z-10">
-                <svg id="passwordEyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                class="absolute right-2.5 top-2 text-zinc-400 hover:text-black transition p-1 cursor-pointer z-10">
+                <svg id="passwordEyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -113,14 +113,14 @@
         {{-- Submit Button --}}
         <button 
             type="submit" 
-            class="w-full rounded-2xl bg-black hover:bg-zinc-800 py-3.5 text-xs sm:text-sm font-bold text-white transition shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2">
+            class="w-full rounded-xl bg-black hover:bg-zinc-800 py-2.5 text-xs sm:text-sm font-semibold text-white transition shadow-sm flex items-center justify-center gap-2 cursor-pointer mt-1">
             <span>Sign in</span>
         </button>
     </form>
 
     @if (config('campus.auth_mode') === 'self_register')
         <x-slot:footer>
-            <div class="flex items-center justify-between text-xs text-slate-500 w-full max-w-sm sm:max-w-md mx-auto px-4">
+            <div class="flex items-center justify-between text-xs text-zinc-500 w-full max-w-[340px] mx-auto px-2">
                 <span>New student?</span>
                 <a href="{{ route('register') }}" class="font-semibold text-black hover:underline">
                     Create account
