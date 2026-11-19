@@ -15,23 +15,26 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Administrator Account
-        $admin = User::firstOrNew(['email' => 'admin@school.edu']);
-        $admin->name = 'Campus Admin';
-        $admin->password = Hash::make('Password123');
+        $admin = User::firstOrNew(['email' => 'admin@sac.edu.ph']);
+        $admin->name = 'Campus Administrator';
+        $admin->password = Hash::make('ryan123');
         $admin->role = UserRole::Admin;
         $admin->is_active = true;
         $admin->must_change_password = false;
+        $admin->school_id = 'SAC-ADMIN-01';
+        $admin->department = 'Administration';
         $admin->save();
 
         // 2. Student / Faculty Account
-        $student = User::firstOrNew(['email' => 'student@school.edu']);
-        $student->name = 'Student User';
+        $student = User::firstOrNew(['email' => 'figueroaryan@sac.edu.ph']);
+        $student->name = 'Ryan Figueroa';
         $student->department = 'College of Computer Studies';
-        $student->phone = '+63 912 345 6789';
-        $student->password = Hash::make('Password123');
+        $student->phone = '+63 963 804 0781';
+        $student->password = Hash::make('ryan123');
         $student->role = UserRole::User;
         $student->is_active = true;
         $student->must_change_password = false;
+        $student->school_id = 'SAC-STUDENT-01';
         $student->save();
     }
 }
