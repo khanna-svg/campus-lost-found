@@ -2,9 +2,8 @@
 @php
     $nav = [
         ['label' => 'Dashboard', 'route' => 'dashboard', 'match' => 'dashboard'],
-        ['label' => 'Browse Items', 'route' => 'items.index', 'match' => 'items.*'],
-        ['label' => 'Report Lost', 'route' => 'lost-items.create', 'match' => 'lost-items.*'],
-        ['label' => 'Report Found', 'route' => 'found-items.create', 'match' => 'found-items.*'],
+        ['label' => 'Browse Items', 'route' => 'items.index', 'match' => 'items.index'],
+        ['label' => 'Report an Item', 'route' => 'items.report.create', 'match' => 'items.report.*'],
     ];
 @endphp
 <x-layouts.base :title="$title">

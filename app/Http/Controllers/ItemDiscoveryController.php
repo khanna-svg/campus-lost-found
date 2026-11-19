@@ -64,7 +64,9 @@ class ItemDiscoveryController extends Controller
                 'found_items.category_id',
                 'found_items.user_id',
                 'found_items.created_at',
+                'found_items.contact_info',
                 'users.name as poster_name',
+                'users.email as poster_email',
             ]);
 
         // Lost Items query (public approved, resolved)
@@ -82,7 +84,9 @@ class ItemDiscoveryController extends Controller
                 'lost_items.category_id',
                 'lost_items.user_id',
                 'lost_items.created_at',
+                'lost_items.contact_info',
                 'users.name as poster_name',
+                'users.email as poster_email',
             ]);
 
         // 4. Apply status filters (Simplified: All, Unresolved, Resolved)
@@ -188,15 +192,23 @@ class ItemDiscoveryController extends Controller
 
             // Formatted date (October 13, 2026 style matching reference)
             $item->formatted_date = Carbon::parse($item->item_date)->format('F d, Y');
+            $item->posted_date = Carbon::parse($item->created_at)->format('F j, Y');
 
-            // Poster name fallback
+            // Poster name & contact info
             $item->poster_name = $item->poster_name ?? 'Campus Member';
+            $item->contact_info = $item->contact_info ?: ($item->poster_email ?? 'campus@school.edu');
 
             // Simple status resolution (Unresolved vs Resolved)
             $isResolved = ($item->item_type === 'found' && $item->status === 'returned')
                 || ($item->item_type === 'lost' && $item->status === 'resolved');
             $item->is_resolved = $isResolved;
             $item->status_label = $isResolved ? 'Resolved' : 'Unresolved';
+
+            // Authorization & resolve toggle
+            $item->can_resolve = auth()->check() && (auth()->user()->isAdmin() || auth()->id() === $item->user_id);
+            $item->toggle_resolve_route = $item->item_type === 'found'
+                ? route('found-items.toggle-resolve', $item->id)
+                : route('lost-items.toggle-resolve', $item->id);
 
             return $item;
         });

@@ -6,7 +6,8 @@
     $isResolved = $item->is_resolved ?? false;
 @endphp
 
-<div class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-zinc-200 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300">
+<div class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-zinc-200 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300 cursor-pointer"
+     onclick="if (typeof openItemDetailsModal === 'function') { event.preventDefault(); openItemDetailsModal({{ json_encode($item) }}); }">
     <a href="{{ $detailRoute }}" class="block">
         {{-- Thumbnail / Photo Header --}}
         <div class="relative h-56 w-full overflow-hidden bg-zinc-50 border-b border-zinc-100 flex items-center justify-center">

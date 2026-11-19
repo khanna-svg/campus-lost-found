@@ -16,6 +16,7 @@ use App\Http\Controllers\ItemDiscoveryController;
 use App\Http\Controllers\LostItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportItemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +51,10 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
 
     // Regular user dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Unified Item Reporting (matching reference)
+    Route::get('/report-item', [ReportItemController::class, 'create'])->name('items.report.create');
+    Route::post('/report-item', [ReportItemController::class, 'store'])->name('items.report.store');
 
     // Lost Item Reporting (Module 2)
     Route::get('/report-lost', [LostItemController::class, 'create'])->name('lost-items.create');
