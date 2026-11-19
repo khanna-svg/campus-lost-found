@@ -15,11 +15,11 @@ class DashboardController extends Controller
 {
     /**
      * Entry point for root URL '/'.
-     * Redirects to home if authenticated, or login if guest.
+     * Displays simple, clean campus landing page.
      */
-    public function welcome(): RedirectResponse
+    public function welcome(): View
     {
-        return Auth::check() ? redirect()->route('home') : redirect()->route('login');
+        return view('welcome');
     }
 
     /**

@@ -7,12 +7,14 @@ use Tests\TestCase;
 class ExampleTest extends TestCase
 {
     /**
-     * Guest visiting root should be redirected to login.
+     * Guest visiting root should view the landing page.
      */
-    public function test_guest_is_redirected_to_login(): void
+    public function test_guest_can_view_landing_page(): void
     {
         $response = $this->get('/');
 
-        $response->assertRedirect('/login');
+        $response->assertOk();
+        $response->assertSee('Find what you’ve lost');
+        $response->assertSee('Browse Directory');
     }
 }
