@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+    <!-- Outer Search Loop / Retaining Circle -->
+    <circle cx="56" cy="50" r="32" stroke="#000000" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Modern 'R' Stem & Return Arc -->
+    <path d="M44 28V72" stroke="#000000" stroke-width="8" stroke-linecap="round"/>
+    <path d="M44 32H58C67 32 72 38 72 46C72 54 66 60 56 60H44" stroke="#000000" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Dynamic Return Arrow Leg (Reconnecting path) -->
+    <path d="M54 58L74 84" stroke="#000000" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Magnifier Focus Point / Spark of Discovery -->
+    <circle cx="56" cy="46" r="5" fill="#000000"/>
+    <path d="M80 74L94 88" stroke="#000000" stroke-width="8" stroke-linecap="round"/>
+</svg>
