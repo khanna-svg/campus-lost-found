@@ -47,7 +47,12 @@ class ReportItemController extends Controller
             try {
                 $photoPath = $storage->upload($request->file('photo'), null, $validated['item_type']);
             } catch (Exception $e) {
-                return back()->withInput()->with('error', 'Failed to upload photo: ' . $e->getMessage());
+                try {
+                    $stored = $request->file('photo')->store('item-photos/' . $validated['item_type'], 'public');
+                    $photoPath = '/storage/' . $stored;
+                } catch (\Throwable $localEx) {
+                    \Illuminate\Support\Facades\Log::warning('Photo upload failed: ' . $e->getMessage());
+                }
             }
         }
 
@@ -77,7 +82,7 @@ class ReportItemController extends Controller
             $foundItem->private_details = $validated['description'];
             $foundItem->date_found = $validated['date'];
             $foundItem->location_found = $validated['location'] ?: 'Campus Area';
-            $foundItem->photo_path = $photoPath ?: 'placeholder.jpg';
+            $foundItem->photo_path = $photoPath;
             $foundItem->contact_info = $validated['contact_info'];
             $foundItem->status = FoundItemStatus::Approved;
             $foundItem->reviewed_by = $user->id;

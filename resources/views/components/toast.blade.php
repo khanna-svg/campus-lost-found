@@ -5,7 +5,7 @@
             $toasts[] = ['type' => $type, 'message' => session($key)];
         }
     }
-    if ($errors->any()) {
+    if (isset($errors) && $errors->any()) {
         $toasts[] = ['type' => 'error', 'message' => 'Please check the highlighted fields and try again.'];
     }
 

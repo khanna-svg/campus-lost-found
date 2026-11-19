@@ -129,11 +129,33 @@
                 {{ $items->links() }}
             </div>
         @else
-            <x-empty-state
-                title="No items found"
-                description="We couldn't find any belongings matching your current search parameters."
-                action-label="Clear All Filters"
-                :action-url="route('items.index')" />
+            @if ($hasActiveFilters)
+                <x-empty-state
+                    title="No items found"
+                    description="We couldn't find any belongings matching your current search parameters."
+                    action-label="Clear All Filters"
+                    :action-url="route('items.index')" />
+            @else
+                <div class="rounded-3xl border-2 border-dashed border-zinc-200 bg-white p-12 text-center max-w-lg mx-auto space-y-4 my-8">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-400">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            <circle cx="11" cy="11" r="7" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-4-4" />
+                        </svg>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-zinc-900">No items listed yet</h3>
+                        <p class="text-xs text-zinc-500">
+                            The directory is currently empty. Be the first to report something lost or found on campus!
+                        </p>
+                    </div>
+                    <button type="button"
+                            onclick="openReportModal()"
+                            class="inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
+                        Report an item
+                    </button>
+                </div>
+            @endif
         @endif
     </div>
 
@@ -410,7 +432,7 @@
                     <input type="text"
                            name="contact_info"
                            required
-                           value="{{ auth()->user()->phone ?: auth()->user()->email }}"
+                           value="{{ auth()->check() ? (auth()->user()->phone ?: auth()->user()->email) : '' }}"
                            placeholder="Email or Phone Number"
                            class="w-full rounded-xl border border-zinc-200 px-3.5 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black">
                 </div>
