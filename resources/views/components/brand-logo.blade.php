@@ -13,26 +13,28 @@
         default => 'h-9 w-9',
     };
     $iconSize = match ($size) {
-        'sm' => 'h-4 w-4',
-        'md' => 'h-5 w-5',
-        'lg' => 'h-6 w-6',
-        default => 'h-5 w-5',
+        'sm' => 'h-[21px] w-[21px]',
+        'md' => 'h-[27px] w-[27px]',
+        'lg' => 'h-[34px] w-[34px]',
+        default => 'h-[27px] w-[27px]',
     };
 @endphp
 
 <div class="flex items-center gap-2.5">
     <span class="flex {{ $dimensions }} items-center justify-center rounded-xl bg-black text-white shadow-xs shrink-0">
-        <svg class="{{ $iconSize }}" viewBox="0 0 120 120" fill="none">
-            <!-- Collegiate Shield Profile -->
-            <path d="M60 14L92 26V58C92 78 78 96 60 106C42 96 28 78 28 58V26L60 14Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+        <svg class="{{ $iconSize }}" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <!-- Collegiate Shield Profile with Map Pin Anchor -->
+            <path d="M50 8C68 12 84 15 84 38V52C84 66 66 84 50 92C34 84 16 66 16 52V38C16 15 32 12 50 8Z" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round"/>
             
-            <!-- Radar Search Waves / Pulse -->
-            <circle cx="60" cy="54" r="8" fill="currentColor"/>
-            <path d="M48 42C51.5 38.5 55.5 36.5 60 36.5C64.5 36.5 68.5 38.5 72 42" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-            <path d="M40 34C46 28 53 25 60 25C67 25 74 28 80 34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+            <!-- Solid Map Pin Base Accent -->
+            <path d="M50 90C41 84 30 76 25 66C32 72 42 75 50 75C58 75 68 72 75 66C70 76 59 84 50 90Z" fill="currentColor"/>
             
-            <!-- Central Retrieval Checkmark -->
-            <path d="M48 58L56 66L74 46" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Discovery Magnifying Glass Lens -->
+            <circle cx="50" cy="44" r="17" stroke="currentColor" stroke-width="6.5"/>
+            <path d="M38 56L26 68" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+            
+            <!-- Central Verified Retrieval Checkmark -->
+            <path d="M42 44L48 50L64 32" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </span>
     @if ($withText)
