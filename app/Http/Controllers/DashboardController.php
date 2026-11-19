@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ClaimRequestStatus;
+use App\Enums\FoundItemStatus;
 use App\Enums\LostItemStatus;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
