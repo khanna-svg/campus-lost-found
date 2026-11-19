@@ -22,6 +22,16 @@
                        ])
                        @if (request()->routeIs($item['match'])) aria-current="page" @endif>{{ $item['label'] }}</a>
                 @endforeach
+
+                @auth
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}"
+                           class="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 hover:text-black transition flex items-center gap-1.5 ml-1">
+                            <span class="inline-flex items-center rounded-md bg-black px-1.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">Admin</span>
+                            <span>Portal</span>
+                        </a>
+                    @endif
+                @endauth
             </nav>
 
             <div class="flex items-center gap-2">
@@ -78,6 +88,14 @@
                             </div>
 
                             <div class="py-1">
+                                @if (auth()->user()->isAdmin())
+                                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-zinc-900 hover:bg-zinc-50" role="menuitem">
+                                        <svg class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                        </svg>
+                                        Admin Portal
+                                    </a>
+                                @endif
                                 <a href="{{ route('profile.show') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black" role="menuitem">
                                     <svg class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
                                     Account Profile
@@ -123,6 +141,12 @@
                     <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">{{ $item['label'] }}</a>
                 @endforeach
                 @auth
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-semibold text-black bg-zinc-100 flex items-center justify-between">
+                            <span>Admin Portal</span>
+                            <span class="rounded bg-black px-1.5 py-0.5 text-[10px] text-white uppercase font-bold">Admin</span>
+                        </a>
+                    @endif
                     <a href="{{ route('profile.show') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">Account Profile</a>
                     <form method="POST" action="{{ route('logout') }}" class="pt-1 border-t border-zinc-100">
                         @csrf
