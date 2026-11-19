@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ClaimVerificationController as AdminClaimVerificationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ReportReviewController as AdminReportReviewController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ClaimRequestController;
@@ -90,4 +94,36 @@ Route::middleware(['auth', 'active', 'password.changed', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+        // Report Review (Module 7 - Phase 10)
+        Route::get('/reports', [AdminReportReviewController::class, 'index'])->name('reports.index');
+        Route::get('/reports/lost/{lostItem}', [AdminReportReviewController::class, 'showLost'])->name('reports.show-lost');
+        Route::get('/reports/found/{foundItem}', [AdminReportReviewController::class, 'showFound'])->name('reports.show-found');
+        Route::post('/reports/lost/{lostItem}/approve', [AdminReportReviewController::class, 'approveLost'])->name('reports.lost.approve');
+        Route::post('/reports/lost/{lostItem}/reject', [AdminReportReviewController::class, 'rejectLost'])->name('reports.lost.reject');
+        Route::post('/reports/lost/{lostItem}/correct', [AdminReportReviewController::class, 'correctLost'])->name('reports.lost.correct');
+        Route::post('/reports/found/{foundItem}/approve', [AdminReportReviewController::class, 'approveFound'])->name('reports.found.approve');
+        Route::post('/reports/found/{foundItem}/reject', [AdminReportReviewController::class, 'rejectFound'])->name('reports.found.reject');
+        Route::post('/reports/found/{foundItem}/correct', [AdminReportReviewController::class, 'correctFound'])->name('reports.found.correct');
+
+        // Claim Verification (Module 7 - Phase 10)
+        Route::get('/claims', [AdminClaimVerificationController::class, 'index'])->name('claims.index');
+        Route::get('/claims/{claim}', [AdminClaimVerificationController::class, 'show'])->name('claims.show');
+        Route::post('/claims/{claim}/under-review', [AdminClaimVerificationController::class, 'underReview'])->name('claims.under-review');
+        Route::post('/claims/{claim}/request-info', [AdminClaimVerificationController::class, 'requestInfo'])->name('claims.request-info');
+        Route::post('/claims/{claim}/approve', [AdminClaimVerificationController::class, 'approve'])->name('claims.approve');
+        Route::post('/claims/{claim}/reject', [AdminClaimVerificationController::class, 'reject'])->name('claims.reject');
+        Route::post('/claims/{claim}/return', [AdminClaimVerificationController::class, 'recordReturn'])->name('claims.record-return');
+
+        // User Management (Module 7 - Phase 10)
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::post('/users/{user}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('users.toggle-active');
+        Route::post('/users/{user}/toggle-role', [AdminUserController::class, 'toggleRole'])->name('users.toggle-role');
+        Route::post('/users/{user}/reset-password', [AdminUserController::class, 'resetPassword'])->name('users.reset-password');
+
+        // Category Management (Module 7 - Phase 10)
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::post('/categories/{category}/toggle-active', [AdminCategoryController::class, 'toggleActive'])->name('categories.toggle-active');
     });
