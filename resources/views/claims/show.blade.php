@@ -173,7 +173,7 @@
 
         {{-- Found Item Reference Card --}}
         <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 space-y-4">
-            <h2 class="text-base font-bold text-zinc-900 border-b border-zinc-100 pb-3">Item Claimed</h2>
+            <h2 class="text-base font-bold text-zinc-900 border-b border-zinc-100 pb-3">Item Details</h2>
             <div class="flex items-center gap-4">
                 @if ($claim->foundItem->photo_url)
                     <img src="{{ $claim->foundItem->photo_url }}" alt="{{ $claim->foundItem->item_name }}"
