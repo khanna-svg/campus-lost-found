@@ -1,15 +1,14 @@
 @props(['title' => null])
 @php
     $nav = [
-        ['label' => 'Dashboard', 'route' => 'dashboard', 'match' => 'dashboard'],
-        ['label' => 'Browse Items', 'route' => 'items.index', 'match' => 'items.index'],
-        ['label' => 'Report an Item', 'route' => 'items.report.create', 'match' => 'items.report.*'],
+        ['label' => 'Lost & Found', 'route' => 'items.index', 'match' => 'items.*'],
+        ['label' => 'Report an item', 'route' => 'items.report.create', 'match' => 'items.report.*'],
     ];
 @endphp
 <x-layouts.base :title="$title">
     <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 font-bold tracking-tight text-zinc-900">
+            <a href="{{ route('items.index') }}" class="flex items-center gap-2.5 font-bold tracking-tight text-zinc-900">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black text-white shadow-sm ring-1 ring-black">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />

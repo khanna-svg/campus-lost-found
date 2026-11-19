@@ -34,64 +34,22 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('items.index');
     }
 
     /**
-     * Regular user (Student / Faculty) dashboard.
-     * Computes real-time overview stats and fetches recent activity.
+     * Regular user dashboard - redirected to Browse Item Directory.
      */
-    public function index(Request $request): View|RedirectResponse
+    public function index(Request $request): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
 
-        if ($user->isAdmin()) {
+        if ($user && $user->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
 
-        // Stats calculation
-        $stats = [
-            'active_lost' => $user->lostItems()
-                ->whereIn('status', [LostItemStatus::PendingReview, LostItemStatus::Approved])
-                ->count(),
-            'found_reported' => $user->foundItems()
-                ->count(),
-            'pending_claims' => $user->claimRequests()
-                ->whereIn('status', [
-                    ClaimRequestStatus::Pending,
-                    ClaimRequestStatus::UnderReview,
-                    ClaimRequestStatus::AdditionalInformationRequired,
-                    ClaimRequestStatus::Approved,
-                ])
-                ->count(),
-            'resolved' => $user->lostItems()
-                ->where('status', LostItemStatus::Resolved)
-                ->count() + $user->foundItems()
-                ->where('status', FoundItemStatus::Returned)
-                ->count(),
-        ];
-
-        // Recent items
-        $recentLost = $user->lostItems()
-            ->with('category')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $recentFound = $user->foundItems()
-            ->with('category')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $recentClaims = $user->claimRequests()
-            ->with(['foundItem.category'])
-            ->latest()
-            ->take(5)
-            ->get();
-
-        return view('dashboard', compact('user', 'stats', 'recentLost', 'recentFound', 'recentClaims'));
+        return redirect()->route('items.index');
     }
 
     /**
