@@ -1,7 +1,7 @@
 <x-layouts.app title="My Profile">
     <div class="mx-auto max-w-2xl space-y-8">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">My Profile</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">My profile</h1>
             <p class="mt-1 text-sm text-zinc-500">Manage your contact details and password.</p>
         </div>
 

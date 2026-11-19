@@ -51,6 +51,7 @@ class ItemDiscoveryController extends Controller
         // 3. Prepare queries for each item type
         // Found Items query (public approved, claimed, returned)
         $foundQuery = DB::table('found_items')
+            ->leftJoin('users', 'found_items.user_id', '=', 'users.id')
             ->select([
                 'found_items.id',
                 DB::raw("'found' as item_type"),
@@ -63,10 +64,12 @@ class ItemDiscoveryController extends Controller
                 'found_items.category_id',
                 'found_items.user_id',
                 'found_items.created_at',
+                'users.name as poster_name',
             ]);
 
         // Lost Items query (public approved, resolved)
         $lostQuery = DB::table('lost_items')
+            ->leftJoin('users', 'lost_items.user_id', '=', 'users.id')
             ->select([
                 'lost_items.id',
                 DB::raw("'lost' as item_type"),
@@ -79,20 +82,21 @@ class ItemDiscoveryController extends Controller
                 'lost_items.category_id',
                 'lost_items.user_id',
                 'lost_items.created_at',
+                'users.name as poster_name',
             ]);
 
-        // 4. Apply status filters
-        if ($status === 'approved') {
-            $foundQuery->where('found_items.status', 'approved');
+        // 4. Apply status filters (Simplified: All, Unresolved, Resolved)
+        if ($status === 'unresolved' || $status === 'approved') {
+            $foundQuery->whereIn('found_items.status', ['approved', 'claimed']);
             $lostQuery->where('lost_items.status', 'approved');
+        } elseif ($status === 'resolved') {
+            $foundQuery->where('found_items.status', 'returned');
+            $lostQuery->where('lost_items.status', 'resolved');
         } elseif (in_array($status, ['claimed', 'returned'])) {
             $foundQuery->where('found_items.status', $status);
             $lostQuery->whereRaw('1 = 0');
-        } elseif ($status === 'resolved') {
-            $foundQuery->whereRaw('1 = 0');
-            $lostQuery->where('lost_items.status', 'resolved');
         } else {
-            // Default public visibility
+            // Default public visibility (show both unresolved and resolved items)
             $foundQuery->whereIn('found_items.status', ['approved', 'claimed', 'returned']);
             $lostQuery->whereIn('lost_items.status', ['approved', 'resolved']);
         }
@@ -172,7 +176,7 @@ class ItemDiscoveryController extends Controller
             $item->category = $categoriesById->get($item->category_id);
 
             // Generate photo URL
-            if (! empty($item->photo_path)) {
+            if (! empty($item->photo_path) && $item->photo_path !== 'placeholder.jpg') {
                 if (filter_var($item->photo_path, FILTER_VALIDATE_URL)) {
                     $item->photo_url = $item->photo_path;
                 } else {
@@ -182,8 +186,17 @@ class ItemDiscoveryController extends Controller
                 $item->photo_url = null;
             }
 
-            // Formatted date
-            $item->formatted_date = Carbon::parse($item->item_date)->format('M d, Y');
+            // Formatted date (October 13, 2026 style matching reference)
+            $item->formatted_date = Carbon::parse($item->item_date)->format('F d, Y');
+
+            // Poster name fallback
+            $item->poster_name = $item->poster_name ?? 'Campus Member';
+
+            // Simple status resolution (Unresolved vs Resolved)
+            $isResolved = ($item->item_type === 'found' && $item->status === 'returned')
+                || ($item->item_type === 'lost' && $item->status === 'resolved');
+            $item->is_resolved = $isResolved;
+            $item->status_label = $isResolved ? 'Resolved' : 'Unresolved';
 
             return $item;
         });

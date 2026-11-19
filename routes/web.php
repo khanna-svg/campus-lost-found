@@ -55,11 +55,13 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     Route::get('/report-lost', [LostItemController::class, 'create'])->name('lost-items.create');
     Route::post('/lost-items', [LostItemController::class, 'store'])->name('lost-items.store');
     Route::get('/lost-items/{lostItem}', [LostItemController::class, 'show'])->name('lost-items.show');
+    Route::patch('/lost-items/{lostItem}/toggle-resolve', [LostItemController::class, 'toggleResolve'])->name('lost-items.toggle-resolve');
 
     // Found Item Reporting (Module 3)
     Route::get('/report-found', [FoundItemController::class, 'create'])->name('found-items.create');
     Route::post('/found-items', [FoundItemController::class, 'store'])->name('found-items.store');
     Route::get('/found-items/{foundItem}', [FoundItemController::class, 'show'])->name('found-items.show');
+    Route::patch('/found-items/{foundItem}/toggle-resolve', [FoundItemController::class, 'toggleResolve'])->name('found-items.toggle-resolve');
 
     // Item Discovery & Search (Module 4 - Phase 7)
     Route::get('/items', [ItemDiscoveryController::class, 'index'])->name('items.index');

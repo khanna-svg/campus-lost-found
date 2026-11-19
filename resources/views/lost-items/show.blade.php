@@ -10,7 +10,36 @@
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">{{ $lostItem->item_name }}</h1>
-                <x-status-badge :status="$lostItem->status" />
+                <div class="flex items-center gap-2">
+                    @if ($lostItem->status->value === 'resolved')
+                        <span class="inline-flex items-center rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-700 border border-zinc-200">
+                            Resolved
+                        </span>
+                    @else
+                        <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 border border-amber-200">
+                            Unresolved
+                        </span>
+                    @endif
+
+                    @if ($isAuthorized && in_array($lostItem->status->value, ['approved', 'resolved']))
+                        <form method="POST" action="{{ route('lost-items.toggle-resolve', $lostItem) }}" class="inline">
+                            @csrf
+                            @method('PATCH')
+                            @if ($lostItem->status->value === 'resolved')
+                                <button type="submit" class="rounded-lg bg-white px-3 py-1 text-xs font-semibold text-zinc-700 ring-1 ring-zinc-300 hover:bg-zinc-50 transition">
+                                    Mark Unresolved
+                                </button>
+                            @else
+                                <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-black px-3 py-1 text-xs font-semibold text-white hover:bg-zinc-800 transition">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                    </svg>
+                                    Mark as Resolved
+                                </button>
+                            @endif
+                        </form>
+                    @endif
+                </div>
             </div>
             <p class="mt-1 text-xs text-zinc-500">
                 Reported by {{ $lostItem->user->name }} · {{ $lostItem->created_at->format('M d, Y h:i A') }}

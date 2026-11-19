@@ -65,4 +65,28 @@ class FoundItemController extends Controller
 
         return view('found-items.show', compact('foundItem', 'isAuthorized'));
     }
+
+    /**
+     * Toggle the resolved status of a found item report.
+     */
+    public function toggleResolve(Request $request, FoundItem $foundItem): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (! $user->isAdmin() && $foundItem->user_id !== $user->id) {
+            abort(403, 'You are not authorized to modify the status of this item.');
+        }
+
+        if ($foundItem->status === FoundItemStatus::Returned) {
+            $foundItem->status = FoundItemStatus::Approved;
+            $foundItem->save();
+            $message = 'Item marked as unresolved.';
+        } else {
+            $foundItem->status = FoundItemStatus::Returned;
+            $foundItem->save();
+            $message = 'Item marked as resolved (returned to rightful owner)!';
+        }
+
+        return back()->with('success', $message);
+    }
 }

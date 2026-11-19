@@ -68,4 +68,30 @@ class LostItemController extends Controller
 
         return view('lost-items.show', compact('lostItem', 'isAuthorized'));
     }
+
+    /**
+     * Toggle the resolved status of a lost item report.
+     */
+    public function toggleResolve(Request $request, LostItem $lostItem): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (! $user->isAdmin() && $lostItem->user_id !== $user->id) {
+            abort(403, 'You are not authorized to modify the status of this item.');
+        }
+
+        if ($lostItem->status === LostItemStatus::Resolved) {
+            $lostItem->status = LostItemStatus::Approved;
+            $lostItem->resolved_at = null;
+            $lostItem->save();
+            $message = 'Item marked as unresolved.';
+        } else {
+            $lostItem->status = LostItemStatus::Resolved;
+            $lostItem->resolved_at = now();
+            $lostItem->save();
+            $message = 'Item marked as resolved! We are glad your belonging was found.';
+        }
+
+        return back()->with('success', $message);
+    }
 }

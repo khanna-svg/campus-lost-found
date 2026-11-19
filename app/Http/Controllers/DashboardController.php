@@ -66,8 +66,8 @@ class DashboardController extends Controller
                 ->count(),
             'resolved' => $user->lostItems()
                 ->where('status', LostItemStatus::Resolved)
-                ->count() + $user->claimRequests()
-                ->where('status', ClaimRequestStatus::Completed)
+                ->count() + $user->foundItems()
+                ->where('status', FoundItemStatus::Returned)
                 ->count(),
         ];
 

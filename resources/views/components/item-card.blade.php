@@ -3,121 +3,104 @@
 @php
     $isFound = $item->item_type === 'found';
     $detailRoute = $isFound ? route('found-items.show', $item->id) : route('lost-items.show', $item->id);
-    $categoryName = $item->category ? $item->category->name : 'Uncategorized';
+    $isResolved = $item->is_resolved ?? false;
 @endphp
 
-<div class="group flex flex-col justify-between overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-zinc-900">
-    <div>
+<div class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-zinc-200 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300">
+    <a href="{{ $detailRoute }}" class="block">
         {{-- Thumbnail / Photo Header --}}
-        <div class="relative h-48 w-full overflow-hidden bg-zinc-100">
+        <div class="relative h-56 w-full overflow-hidden bg-zinc-50 border-b border-zinc-100 flex items-center justify-center">
             @if (! empty($item->photo_url))
                 <img src="{{ $item->photo_url }}"
                      alt="{{ $item->item_name }}"
                      loading="lazy"
-                     onerror="this.onerror=null; this.parentElement.classList.add('flex', 'items-center', 'justify-center'); this.remove();"
+                     onerror="this.onerror=null; this.remove(); document.getElementById('card-placeholder-{{ $item->item_type }}-{{ $item->id }}').classList.remove('hidden');"
                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                {{-- Fallback SVG if image is missing --}}
-                <div class="hidden absolute inset-0 flex flex-col items-center justify-center bg-zinc-50 text-zinc-400">
-                    <svg class="h-10 w-10 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                {{-- Fallback SVG if image fails to load --}}
+                <div id="card-placeholder-{{ $item->item_type }}-{{ $item->id }}" class="hidden flex items-center justify-center text-zinc-300">
+                    <svg class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <circle cx="11" cy="11" r="7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-4-4" />
                     </svg>
-                    <span class="mt-1 text-[11px] font-medium text-zinc-400">Photo unavailable</span>
                 </div>
             @else
-                <div class="flex h-full w-full flex-col items-center justify-center bg-zinc-50 text-zinc-400">
-                    <svg class="h-10 w-10 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                {{-- Minimalist Magnifying Glass Placeholder (matching reference) --}}
+                <div class="flex items-center justify-center text-zinc-300">
+                    <svg class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <circle cx="11" cy="11" r="7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-4-4" />
                     </svg>
-                    <span class="mt-1 text-[11px] font-medium text-zinc-400">No photo provided</span>
                 </div>
             @endif
 
-            {{-- Floating Badges --}}
-            <div class="absolute inset-x-3 top-3 flex items-center justify-between pointer-events-none">
-                {{-- Type Badge (Black / Dark Zinc) --}}
+            {{-- Floating Badges in Top Right Corner (matching reference) --}}
+            <div class="absolute top-3.5 right-3.5 flex flex-col items-end gap-1.5 pointer-events-none">
+                {{-- Item Type Badge (Found Item vs Lost Item) --}}
                 @if ($isFound)
-                    <span class="inline-flex items-center gap-1 rounded-full bg-black/90 px-2.5 py-0.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur">
-                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                        Found
+                    <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 border border-emerald-100/60 shadow-xs">
+                        Found Item
                     </span>
                 @else
-                    <span class="inline-flex items-center gap-1 rounded-full bg-zinc-800/90 px-2.5 py-0.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur">
-                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                        </svg>
-                        Lost
+                    <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-500 border border-rose-100/60 shadow-xs">
+                        Lost Item
                     </span>
                 @endif
 
-                {{-- Status Pill --}}
-                @if ($item->status === 'approved')
-                    @if ($isFound)
-                        <span class="inline-flex items-center rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold text-black ring-1 ring-inset ring-zinc-300 shadow-sm backdrop-blur">
-                            Available to Claim
-                        </span>
-                    @else
-                        <span class="inline-flex items-center rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold text-zinc-800 ring-1 ring-inset ring-zinc-300 shadow-sm backdrop-blur">
-                            Actively Missing
-                        </span>
-                    @endif
-                @elseif ($item->status === 'claimed')
-                    <span class="inline-flex items-center rounded-full bg-zinc-900 px-2.5 py-0.5 text-[10px] font-bold text-white shadow-sm">
-                        Claimed
-                    </span>
-                @elseif ($item->status === 'returned')
-                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-bold text-zinc-900 ring-1 ring-inset ring-zinc-300 shadow-sm">
-                        Returned to Owner
-                    </span>
-                @elseif ($item->status === 'resolved')
-                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-bold text-zinc-900 ring-1 ring-inset ring-zinc-300 shadow-sm">
+                {{-- Status Badge (Unresolved vs Resolved) --}}
+                @if ($isResolved)
+                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-600 border border-zinc-200/60 shadow-xs">
                         Resolved
+                    </span>
+                @else
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-600 border border-amber-100/60 shadow-xs">
+                        Unresolved
                     </span>
                 @endif
             </div>
         </div>
 
-        {{-- Card Content --}}
-        <div class="p-5 space-y-3">
-            <div class="flex items-center gap-2">
-                <span class="inline-block rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-800">
-                    {{ $categoryName }}
-                </span>
-                <span class="text-xs text-zinc-400">·</span>
-                <span class="text-xs text-zinc-500">
-                    {{ $isFound ? 'Found ' : 'Lost ' }} {{ $item->formatted_date }}
-                </span>
-            </div>
-
+        {{-- Card Body --}}
+        <div class="p-5 space-y-2">
+            {{-- Title --}}
             <h3 class="text-base font-bold text-zinc-900 group-hover:text-black transition-colors line-clamp-1">
-                <a href="{{ $detailRoute }}" class="hover:underline">
-                    {{ $item->item_name }}
-                </a>
+                {{ $item->item_name }}
             </h3>
 
-            <p class="text-xs leading-relaxed text-zinc-600 line-clamp-2">
+            {{-- Description Snippet --}}
+            <p class="text-xs leading-relaxed text-zinc-500 line-clamp-2 min-h-[2rem]">
                 {{ $item->description }}
             </p>
 
-            <div class="flex items-center gap-1.5 text-xs text-zinc-500 pt-1">
-                <svg class="h-3.5 w-3.5 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                </svg>
-                <span class="truncate">{{ $item->location }}</span>
+            {{-- Horizontal Divider --}}
+            <hr class="my-3.5 border-zinc-100">
+
+            {{-- 3 Metadata Rows with Icons --}}
+            <div class="space-y-2 text-xs text-zinc-500">
+                {{-- Location --}}
+                <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                    <span class="truncate">{{ $item->location }}</span>
+                </div>
+
+                {{-- Date --}}
+                <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.253 18.75m-18-13.5h22.5m-22.5 0v13.5A2.25 2.25 0 0 0 4.5 21h15a2.25 2.25 0 0 0 2.25-2.25V7.5H2.25Z" />
+                    </svg>
+                    <span>{{ $item->formatted_date }}</span>
+                </div>
+
+                {{-- Poster Name --}}
+                <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span class="truncate">Posted by {{ $item->poster_name ?? 'Campus Member' }}</span>
+                </div>
             </div>
         </div>
-    </div>
-
-    {{-- Card Footer --}}
-    <div class="border-t border-zinc-100 px-5 py-3.5 bg-zinc-50/50 flex items-center justify-between gap-2">
-        <a href="{{ $detailRoute }}"
-           class="inline-flex items-center text-xs font-semibold text-zinc-900 hover:text-black hover:underline transition">
-            View Details
-            <svg class="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-        </a>
-    </div>
+    </a>
 </div>
