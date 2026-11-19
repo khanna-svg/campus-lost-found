@@ -218,29 +218,5 @@
                 @endif
             </div>
         </div>
-
-        {{-- Information & Retrieval Guidelines Banner --}}
-        <div class="rounded-2xl bg-black p-6 text-white sm:p-8 border border-zinc-800">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div class="max-w-2xl space-y-2">
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ring-inset ring-zinc-700">
-                        Campus Guidelines
-                    </span>
-                    <h3 class="text-lg font-bold tracking-tight text-white sm:text-xl">
-                        How Verification & Retrieval Works
-                    </h3>
-                    <p class="text-xs leading-relaxed text-zinc-400 sm:text-sm">
-                        To maintain fair and secure item recovery, sensitive identifying characteristics of found items are kept private. If you recognize a found belonging as yours, visit the Campus Lost & Found Office with your School ID to verify ownership and retrieve your property.
-                    </p>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="{{ route('items.index') }}"
-                       class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-black shadow-sm transition hover:bg-zinc-100">
-                        Search Belongings
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
 </x-layouts.app>
