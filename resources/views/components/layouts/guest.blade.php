@@ -3,10 +3,9 @@
     <main class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
             <div class="mb-8 text-center flex flex-col items-center">
-                <a href="{{ route('items.index') }}" class="mb-2 inline-block">
+                <a href="{{ route('items.index') }}" class="inline-block">
                     <x-brand-logo size="lg" textClass="text-2xl font-black tracking-tight text-zinc-900" />
                 </a>
-                <p class="text-xs text-zinc-500 font-medium">{{ config('campus.school_name') }}</p>
             </div>
 
             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
