@@ -4,17 +4,12 @@
         <!-- Left Section: School Campus Picture (Clean Straight Split) -->
         <div class="relative w-full md:w-1/2 lg:w-7/12 h-64 sm:h-80 md:h-auto md:min-h-screen overflow-hidden bg-slate-900 shrink-0 border-b md:border-b-0 md:border-r border-slate-200">
             <img 
-                src="{{ asset('images/classic-brick-school-building-with-green-lawn-and-walkway-photo.webp') }}" 
+                src="{{ asset('images/campus-hero.jpg') }}" 
                 alt="Campus" 
-                class="w-full h-full object-cover object-center filter contrast-[1.05] brightness-[0.95]"
+                class="w-full h-full object-cover object-center filter contrast-[1.03] brightness-[0.98]"
             >
-            <!-- Soft Tint Overlay: smooths pixelation and provides depth -->
-            <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/45 via-slate-900/15 to-transparent"></div>
-
-            <!-- Institutional watermark caption (desktop only) -->
-            <div class="absolute bottom-8 left-8 hidden md:block text-white drop-shadow-md z-10">
-                <p class="text-sm font-semibold text-white/95">Campus Lost &amp; Found Directory</p>
-            </div>
+            <!-- Soft Tint Overlay: provides depth without washing out clarity -->
+            <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/35 via-slate-900/10 to-transparent"></div>
         </div>
 
         <!-- Right Section: White Background Login Credentials -->

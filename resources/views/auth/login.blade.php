@@ -36,7 +36,7 @@
             CampusBeacon
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-zinc-500 font-semibold tracking-wide">
-            Campus Lost &amp; Found Central Portal
+            Find It, Return It
         </p>
     </div>
 
