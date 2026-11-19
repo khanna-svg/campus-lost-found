@@ -78,7 +78,7 @@
 
                     <div class="rounded-2xl bg-zinc-50 p-4 border border-zinc-100">
                         <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-1">Ownership Statement</span>
-                        <p class="text-xs text-zinc-800 font-medium whitespace-pre-line leading-relaxed">{{ $claim->proof_description ?: $claim->claim_description }}</p>
+                        <p class="text-xs text-zinc-800 font-medium whitespace-pre-line leading-relaxed">{{ $claim->proof_description ?: ($claim->claim_description ?: 'No statement provided by claimant.') }}</p>
                     </div>
 
                     @php $evidenceUrls = $claim->evidence_urls; @endphp

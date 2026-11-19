@@ -118,9 +118,9 @@
                                 <div class="text-left sm:text-right">
                                     <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Date Submitted</span>
                                     <p class="text-xs font-semibold text-zinc-700">{{ $claim->created_at->format('M d, Y h:i A') }}</p>
-                                    <span class="inline-block mt-0.5 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700">
-                                        {{ $claim->status->label() }}
-                                    </span>
+                                    <div class="mt-1">
+                                        <x-status-badge :status="$claim->status" />
+                                    </div>
                                 </div>
                             </div>
 
@@ -148,7 +148,7 @@
                                 <div class="space-y-1">
                                     <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Student Ownership Proof</span>
                                     <div class="rounded-xl bg-white p-3 border border-zinc-200 text-xs text-zinc-700 leading-relaxed">
-                                        {{ $claim->claim_description }}
+                                        {{ $claim->proof_description ?: ($claim->claim_description ?: 'No statement provided.') }}
                                     </div>
                                 </div>
                             </div>
