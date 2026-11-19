@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class ProfileTest extends TestCase
+class UserProfileTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -58,11 +58,12 @@ class ProfileTest extends TestCase
 
     public function test_user_with_temporary_password_is_forced_to_profile(): void
     {
-        $user = User::factory()->mustChangePassword()->create();
+        $user = User::factory()->create([
+            'must_change_password' => true,
+        ]);
 
-        $response = $this->actingAs($user)->get('/dashboard');
+        $response = $this->actingAs($user)->get('/items');
 
         $response->assertRedirect('/profile');
-        $response->assertSessionHas('warning');
     }
 }

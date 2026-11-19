@@ -18,10 +18,7 @@
                 @csrf
                 @method('PUT')
 
-                <div class="grid gap-5 sm:grid-cols-2">
-                    <x-form.input name="email" label="Institutional Email" :value="$user->email" readonly hint="Managed by the school administrator." />
-                    <x-form.input name="role_label" label="Role" :value="$user->role->label()" readonly />
-                </div>
+                <x-form.input name="email" label="Institutional Email" :value="$user->email" readonly hint="Managed by the school administrator." />
 
                 <x-form.input name="name" label="Full name" :value="$user->name" autocomplete="name" required />
                 <div class="grid gap-5 sm:grid-cols-2">

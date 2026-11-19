@@ -80,9 +80,6 @@
                                 <p class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Institutional Account</p>
                                 <p class="truncate text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
                                 <p class="truncate text-xs text-zinc-600 font-medium">{{ auth()->user()->email }}</p>
-                                <span class="mt-1.5 inline-block rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-800">
-                                    {{ auth()->user()->role->label() }}
-                                </span>
                             </div>
 
                             <div class="py-1">

@@ -44,7 +44,6 @@
 
                     {{-- Mobile-only profile block inside the collapsible menu --}}
                     <div class="mt-8 border-t border-zinc-800 pt-4 px-3 space-y-1 lg:hidden">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Administrator</p>
                         <p class="truncate text-xs font-bold text-white">{{ auth()->user()->name }}</p>
                         <p class="truncate text-[11px] text-zinc-400">{{ auth()->user()->email }}</p>
 
@@ -65,7 +64,6 @@
 
             {{-- Desktop Profile Block Pinned To Bottom of Sidebar --}}
             <div class="hidden lg:block border-t border-zinc-800 p-5 space-y-2 bg-black">
-                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Administrator</p>
                 <p class="truncate text-xs font-bold text-white">{{ auth()->user()->name }}</p>
                 <p class="truncate text-[11px] text-zinc-400">{{ auth()->user()->email }}</p>
 
