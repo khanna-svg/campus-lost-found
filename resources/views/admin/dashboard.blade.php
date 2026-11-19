@@ -165,12 +165,12 @@
                                         @csrf
                                         <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at Administration Hall, Room 102. Please bring your School ID card.">
                                         <button type="submit"
-                                                onclick="return confirm('Approve claim for {{ addslashes($claim->claimant->name) }}? This will email the student to retrieve the item in Room 102.');"
+                                                onclick="return confirm('Approve claim for {{ addslashes($claim->claimant->name) }}?');"
                                                 class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
                                             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                             </svg>
-                                            Approve &amp; Email Student
+                                            Approve
                                         </button>
                                     </form>
 

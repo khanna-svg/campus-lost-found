@@ -119,7 +119,7 @@
                         <form method="POST" action="{{ route('admin.claims.approve', $claim) }}" class="rounded-2xl bg-zinc-50 p-4 border border-zinc-200 space-y-3">
                             @csrf
                             <div>
-                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900">Approve Claim &amp; Send Email Notification</h4>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900">Approve Claim</h4>
                                 <p class="text-[11px] text-zinc-500">Instructs the student that their claim is verified and ready for pickup at Administration Hall, Room 102.</p>
                             </div>
                             <div>
@@ -132,7 +132,7 @@
                             <button type="submit"
                                     onclick="return confirm('Approve this claim? This will automatically email {{ addslashes($claim->claimant->name) }} with pickup instructions.');"
                                     class="w-full rounded-xl bg-black px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
-                                ✓ Approve &amp; Email Student
+                                Approve
                             </button>
                         </form>
                     @endif
