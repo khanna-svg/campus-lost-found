@@ -49,7 +49,7 @@
             <div class="md:col-span-2 space-y-4">
                 {{-- Public Description --}}
                 <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 space-y-2">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Public Description</h2>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Description</h2>
                     <p class="text-sm text-slate-800 leading-relaxed whitespace-pre-line">{{ $foundItem->public_description }}</p>
                 </div>
 

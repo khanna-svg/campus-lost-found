@@ -48,7 +48,7 @@
                     </div>
 
                     <div>
-                        <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-1">Public Description</span>
+                        <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-1">Description</span>
                         <p class="text-xs text-zinc-700 bg-zinc-50 p-3.5 rounded-2xl border border-zinc-100 whitespace-pre-line">{{ $claim->foundItem->public_description }}</p>
                     </div>
 
