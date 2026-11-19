@@ -177,7 +177,7 @@
                         <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 space-y-2">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
                                 <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                Item Reunited &amp; Handed Over
+                                Item Returned to Owner
                             </span>
                             @if ($claim->itemReturn)
                                 <div class="grid grid-cols-2 gap-2 text-xs text-zinc-700 pt-1">
@@ -198,10 +198,6 @@
                                         <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_at->format('M d, Y h:i A') }}</span>
                                     </div>
                                 </div>
-                            @else
-                                <p class="text-xs text-emerald-900 leading-relaxed">
-                                    This claim is completed and the item has been marked as resolved and returned.
-                                </p>
                             @endif
                         </div>
                     @endif
