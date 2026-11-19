@@ -172,31 +172,55 @@
                         </form>
                     @endif
 
-                    @if ($claim->status->value === 'completed' && $claim->itemReturn)
-                        <div class="rounded-2xl bg-zinc-50 p-4 border border-zinc-200 space-y-2">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 block">✓ Item Handed Over &amp; Returned</span>
-                            <div class="grid grid-cols-2 gap-2 text-xs text-zinc-700 pt-1">
-                                <div>
-                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Received By</span>
-                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_to_name }}</span>
+                    {{-- 3. Completed Claim Display --}}
+                    @if ($claim->status->value === 'completed')
+                        <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 space-y-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Item Reunited &amp; Handed Over
+                            </span>
+                            @if ($claim->itemReturn)
+                                <div class="grid grid-cols-2 gap-2 text-xs text-zinc-700 pt-1">
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-zinc-400 block">Received By</span>
+                                        <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_to_name }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-zinc-400 block">LRN</span>
+                                        <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->lrn ?? ($claim->itemReturn->id_presented ?? 'N/A') }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-zinc-400 block">Course &amp; Year</span>
+                                        <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->course_year ?? 'N/A' }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-zinc-400 block">Handover Date</span>
+                                        <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_at->format('M d, Y h:i A') }}</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">LRN</span>
-                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->lrn ?? ($claim->itemReturn->id_presented ?? 'N/A') }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Course &amp; Year</span>
-                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->course_year ?? 'N/A' }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] uppercase font-bold text-zinc-400 block">Handover Date</span>
-                                    <span class="font-semibold text-zinc-900">{{ $claim->itemReturn->returned_at->format('M d, Y h:i A') }}</span>
-                                </div>
-                            </div>
+                            @else
+                                <p class="text-xs text-emerald-900 leading-relaxed">
+                                    This claim is completed and the item has been marked as resolved and returned.
+                                </p>
+                            @endif
                         </div>
                     @endif
 
-                    {{-- 3. Reject Claim Form --}}
+                    {{-- 4. Rejected Claim Display --}}
+                    @if ($claim->status->value === 'rejected')
+                        <div class="rounded-2xl bg-rose-50 border border-rose-200 p-4 space-y-1.5 text-xs">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                Claim Rejected
+                            </span>
+                            @if ($claim->rejection_reason)
+                                <p class="text-zinc-800"><strong>Reason:</strong> {{ $claim->rejection_reason }}</p>
+                            @endif
+                            <p class="text-[11px] text-zinc-500">This claim was reviewed and rejected. No further actions required.</p>
+                        </div>
+                    @endif
+
+                    {{-- 5. Reject Claim Option (When Not Yet Resolved/Rejected) --}}
                     @if (! in_array($claim->status->value, ['rejected', 'completed']))
                         <details class="pt-2 text-xs">
                             <summary class="cursor-pointer font-semibold text-rose-600 hover:text-rose-800">
