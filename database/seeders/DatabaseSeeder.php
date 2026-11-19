@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $admin->department = 'Administration';
         $admin->save();
 
-        // 2. Student / Faculty Account
+        // 2. Primary Student / Faculty Account
         $student = User::firstOrNew(['email' => 'figueroaryan@sac.edu.ph']);
         $student->name = 'Ryan Figueroa';
         $student->department = 'College of Computer Studies';
@@ -36,5 +36,16 @@ class DatabaseSeeder extends Seeder
         $student->must_change_password = false;
         $student->school_id = 'SAC-STUDENT-01';
         $student->save();
+
+        // 3. Secondary Student / User Account
+        $user2 = User::firstOrNew(['email' => 'user@sac.edu.ph']);
+        $user2->name = 'SAC User';
+        $user2->department = 'College of Computer Studies';
+        $user2->password = Hash::make('ryan123');
+        $user2->role = UserRole::User;
+        $user2->is_active = true;
+        $user2->must_change_password = false;
+        $user2->school_id = 'SAC-STUDENT-02';
+        $user2->save();
     }
 }
