@@ -26,7 +26,7 @@
             <div class="space-y-4">
                 <div class="rounded-3xl bg-white p-6 border border-zinc-200 shadow-xs space-y-4">
                     <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
-                        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Physical Item Details</h2>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Item Details</h2>
                         <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-700">Official Record</span>
                     </div>
 
