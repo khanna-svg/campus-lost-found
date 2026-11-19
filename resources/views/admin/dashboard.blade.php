@@ -144,9 +144,9 @@
                                     </div>
                                 </div>
 
-                                {{-- Right: Claimant Ownership Statement --}}
+                                {{-- Right: Claimant Owner Description --}}
                                 <div class="space-y-1">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Student Ownership Proof</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Owner Description</span>
                                     <div class="rounded-xl bg-white p-3 border border-zinc-200 text-xs text-zinc-700 leading-relaxed">
                                         {{ $claim->proof_description ?: ($claim->claim_description ?: 'No statement provided.') }}
                                     </div>
