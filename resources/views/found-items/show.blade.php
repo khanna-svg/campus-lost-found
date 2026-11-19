@@ -101,17 +101,11 @@
                     </div>
                 @endif
 
-                {{-- Claim Call to Action for Other Users --}}
+                {{-- Physical Retrieval Notice for Other Users --}}
                 @if ($foundItem->status->value === 'approved' && $foundItem->user_id !== auth()->id())
-                    <div class="rounded-2xl bg-black p-6 text-white border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div class="space-y-1">
-                            <h3 class="text-sm font-bold text-white">Recognize this item as yours?</h3>
-                            <p class="text-xs text-zinc-400">Submit a claim request with ownership proof to recover your item through campus security.</p>
-                        </div>
-                        <a href="{{ route('claims.create', $foundItem) }}"
-                           class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-black shadow-sm hover:bg-zinc-100 shrink-0 transition">
-                            Submit Claim Request
-                        </a>
+                    <div class="rounded-2xl bg-black p-6 text-white border border-zinc-800 space-y-1">
+                        <h3 class="text-sm font-bold text-white">Recognize this item as yours?</h3>
+                        <p class="text-xs text-zinc-400">Please visit the Campus Lost & Found Office (Administration Hall, Room 102) with your valid school ID to verify ownership and retrieve your belonging.</p>
                     </div>
                 @endif
             </div>

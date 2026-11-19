@@ -47,11 +47,10 @@ class DashboardTest extends TestCase
         $response->assertSee('Welcome back, Maria Santos');
         $response->assertSee('Active Lost Reports');
         $response->assertSee('Found Items Logged');
-        $response->assertSee('Active Claims');
         $response->assertSee('Reunited Belongings');
         $response->assertSee('No lost items reported yet');
         $response->assertSee('No found items reported yet');
-        $response->assertSee('No claim requests submitted');
+        $response->assertDontSee('Active Claims');
     }
 
     public function test_dashboard_displays_user_reports_and_counts_accurately(): void
@@ -125,7 +124,6 @@ class DashboardTest extends TestCase
         $response->assertOk();
         $response->assertSee('Graphing Calculator');
         $response->assertSee('Set of Dorm Keys');
-        $response->assertSee('Black Backpack');
         $response->assertSee('Science Lab 3');
         $response->assertSee('Pending Review');
     }

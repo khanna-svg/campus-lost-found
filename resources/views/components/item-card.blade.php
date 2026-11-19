@@ -119,12 +119,5 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
         </a>
-
-        @if ($isFound && $item->status === 'approved')
-            <a href="{{ route('claims.create', $item->id) }}"
-               class="rounded-lg bg-black px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-zinc-800 transition">
-                Claim Item
-            </a>
-        @endif
     </div>
 </div>

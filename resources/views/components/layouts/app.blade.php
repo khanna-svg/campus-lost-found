@@ -5,7 +5,6 @@
         ['label' => 'Browse Items', 'route' => 'items.index', 'match' => 'items.*'],
         ['label' => 'Report Lost', 'route' => 'lost-items.create', 'match' => 'lost-items.*'],
         ['label' => 'Report Found', 'route' => 'found-items.create', 'match' => 'found-items.*'],
-        ['label' => 'My Claims', 'route' => 'claims.index', 'match' => 'claims.*'],
     ];
 @endphp
 <x-layouts.base :title="$title">

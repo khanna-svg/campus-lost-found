@@ -39,8 +39,8 @@
             </div>
         </div>
 
-        {{-- Statistics Overview Cards --}}
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
+        {{-- Statistics Overview Cards (3 Cards) --}}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
             <x-stat-card
                 title="Active Lost Reports"
                 :value="$stats['active_lost']"
@@ -66,18 +66,6 @@
             </x-stat-card>
 
             <x-stat-card
-                title="Active Claims"
-                :value="$stats['pending_claims']"
-                description="Awaiting review"
-            >
-                <x-slot:icon>
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                    </svg>
-                </x-slot:icon>
-            </x-stat-card>
-
-            <x-stat-card
                 title="Reunited Belongings"
                 :value="$stats['resolved']"
                 description="Successfully returned"
@@ -96,7 +84,7 @@
             <div class="border-b border-zinc-200 px-6 pt-5">
                 <div class="flex flex-wrap items-center justify-between gap-4 pb-4">
                     <div>
-                        <h2 class="text-base font-bold text-zinc-900">My Reports & Claims</h2>
+                        <h2 class="text-base font-bold text-zinc-900">My Reports</h2>
                         <p class="text-xs text-zinc-500">Track current status and updates for your items</p>
                     </div>
 
@@ -114,13 +102,6 @@
                                 role="tab"
                                 aria-selected="false">
                             Found Reports ({{ $recentFound->count() }})
-                        </button>
-                        <button type="button"
-                                data-tab-target="tab-claims"
-                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-black transition"
-                                role="tab"
-                                aria-selected="false">
-                            My Claims ({{ $recentClaims->count() }})
                         </button>
                     </div>
                 </div>
@@ -236,65 +217,6 @@
                     </div>
                 @endif
             </div>
-
-            {{-- Tab 3: My Claims --}}
-            <div id="tab-claims" class="hidden p-6">
-                @if ($recentClaims->isEmpty())
-                    <x-empty-state
-                        title="No claim requests submitted"
-                        description="If you see an item listed that matches your lost belongings, click 'Claim Item' on its details page to submit proof of ownership."
-                    >
-                        <a href="{{ route('items.index') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-zinc-800 transition">
-                            Browse Directory
-                        </a>
-                    </x-empty-state>
-                @else
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-zinc-600">
-                            <thead class="border-b border-zinc-100 text-xs font-semibold uppercase text-zinc-400">
-                                <tr>
-                                    <th class="pb-3">Claimed Item</th>
-                                    <th class="pb-3">Category</th>
-                                    <th class="pb-3">Date Submitted</th>
-                                    <th class="pb-3">Status</th>
-                                    <th class="pb-3">Instructions / Notice</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-zinc-100">
-                                @foreach ($recentClaims as $claim)
-                                    <tr class="hover:bg-zinc-50/75 transition-colors">
-                                        <td class="py-3.5 font-medium text-zinc-900">
-                                            <a href="{{ route('claims.show', $claim) }}" class="text-black font-semibold hover:underline">
-                                                {{ $claim->foundItem->item_name ?? 'Item' }}
-                                            </a>
-                                        </td>
-                                        <td class="py-3.5">
-                                            <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800">
-                                                {{ $claim->foundItem->category->name ?? 'General' }}
-                                            </span>
-                                        </td>
-                                        <td class="py-3.5 text-xs text-zinc-500">
-                                            {{ $claim->created_at->format('M d, Y') }}
-                                        </td>
-                                        <td class="py-3.5">
-                                            <x-status-badge :status="$claim->status" />
-                                        </td>
-                                        <td class="py-3.5 text-xs">
-                                            @if ($claim->admin_message)
-                                                <span class="text-zinc-900 font-medium">{{ $claim->admin_message }}</span>
-                                            @elseif ($claim->pickup_instructions)
-                                                <span class="text-black font-semibold underline">{{ $claim->pickup_instructions }}</span>
-                                            @else
-                                                <span class="text-zinc-400">Under administrator review</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @endif
-            </div>
         </div>
 
         {{-- Information & Retrieval Guidelines Banner --}}
@@ -308,7 +230,7 @@
                         How Verification & Retrieval Works
                     </h3>
                     <p class="text-xs leading-relaxed text-zinc-400 sm:text-sm">
-                        To maintain fair and secure item recovery, sensitive identifying characteristics of found items are kept private. When claiming an item, provide specific identifying marks, serial numbers, or unique details that only the true owner would know.
+                        To maintain fair and secure item recovery, sensitive identifying characteristics of found items are kept private. If you recognize a found belonging as yours, visit the Campus Lost & Found Office with your School ID to verify ownership and retrieve your property.
                     </p>
                 </div>
 
