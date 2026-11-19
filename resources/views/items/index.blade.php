@@ -264,6 +264,19 @@
                     Close
                 </button>
             </div>
+
+            {{-- Claim Button (Found Items that are unresolved and not posted by the viewer) --}}
+            <div id="modal-claim-container" class="hidden pt-3 border-t border-zinc-200 flex items-center justify-between">
+                <a id="modal-claim-btn" href="" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    Claim this item
+                </a>
+                <button type="button" onclick="closeItemModal()" class="text-xs font-semibold text-zinc-500 hover:text-black">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 
@@ -478,6 +491,16 @@
                 resolveContainer.classList.remove('hidden');
             } else {
                 resolveContainer.classList.add('hidden');
+            }
+
+            // Claim button
+            const claimContainer = document.getElementById('modal-claim-container');
+            const claimBtn = document.getElementById('modal-claim-btn');
+            if (item.can_claim && item.claim_route) {
+                claimBtn.href = item.claim_route;
+                claimContainer.classList.remove('hidden');
+            } else {
+                claimContainer.classList.add('hidden');
             }
 
             // Display modal

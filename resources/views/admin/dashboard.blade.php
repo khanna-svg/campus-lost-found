@@ -1,141 +1,246 @@
-<x-layouts.admin title="Executive Console">
+<x-layouts.admin title="Dashboard">
     <div class="space-y-8">
-        {{-- Header & Quick Action Banner --}}
+        {{-- Header & Direct Actions --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Administrative Dashboard</h1>
-                <p class="mt-1 text-sm text-slate-500">
-                    Real-time oversight of reports, claim verifications, and property hand-overs.
+                <h1 class="text-2xl font-black tracking-tight text-zinc-900 sm:text-3xl">Administrative Dashboard</h1>
+                <p class="mt-1 text-xs sm:text-sm text-zinc-500">
+                    Executive overview of campus lost and found operations and student claim approvals.
                 </p>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.reports.index') }}" class="rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-500 transition">
-                    Review Pending Reports
-                </a>
-                <a href="{{ route('admin.claims.index') }}" class="rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 transition">
-                    Verify Claims
+            <div class="flex items-center gap-2.5">
+                <a href="{{ route('items.index') }}"
+                   target="_blank"
+                   class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-zinc-800 border border-zinc-200 shadow-xs hover:bg-zinc-50 transition">
+                    <svg class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                    View Student Directory ↗
                 </a>
             </div>
         </div>
 
-        {{-- 6 Live Metric Cards --}}
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            <x-stat-card title="Pending Found" :value="$stats['pending_found']" description="Review" color="emerald" />
-            <x-stat-card title="Pending Lost" :value="$stats['pending_lost']" description="Review" color="amber" />
-            <x-stat-card title="Open Claims" :value="$stats['open_claims']" description="Verify" color="brand" />
-            <x-stat-card title="Ready Pickup" :value="$stats['approved_claims']" description="Approved" color="indigo" />
-            <x-stat-card title="Reunited" :value="$stats['reunited_items']" description="Returned" color="emerald" />
-            <x-stat-card title="Total Users" :value="$stats['total_users']" description="Accounts" color="brand" />
-        </div>
-
-        {{-- Two-Column Review Feeds --}}
-        <div class="grid gap-6 lg:grid-cols-2">
-            {{-- Pending Found Reports --}}
-            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                        <h2 class="text-sm font-bold text-slate-900">Found Reports Awaiting Review</h2>
-                    </div>
-                    <a href="{{ route('admin.reports.index', ['type' => 'found']) }}" class="text-xs font-semibold text-brand-600 hover:text-brand-800">
-                        View All ({{ $stats['pending_found'] }}) →
-                    </a>
+        {{-- 4 Core Metric Cards (Requested by User) --}}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {{-- Card 1: Total Lost Items --}}
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Total Lost Items</span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                    </span>
                 </div>
-
-                @if ($pendingFound->isNotEmpty())
-                    <div class="divide-y divide-slate-100">
-                        @foreach ($pendingFound as $found)
-                            <div class="flex items-center justify-between py-3">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    @if ($found->photo_url)
-                                        <img src="{{ $found->photo_url }}" alt="" class="h-10 w-10 rounded-lg object-cover shrink-0">
-                                    @else
-                                        <div class="h-10 w-10 rounded-lg bg-slate-100 shrink-0 flex items-center justify-center text-slate-400">?</div>
-                                    @endif
-                                    <div class="min-w-0">
-                                        <h3 class="text-xs font-bold text-slate-900 truncate">{{ $found->item_name }}</h3>
-                                        <p class="text-[11px] text-slate-500 truncate">
-                                            Found by {{ $found->user->name }} · {{ $found->location_found }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <a href="{{ route('admin.reports.show-found', $found) }}" class="rounded-lg bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-100 transition shrink-0 ml-2">
-                                    Review
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <p class="py-6 text-center text-xs text-slate-400">No found items pending review.</p>
-                @endif
+                <div class="mt-4">
+                    <span class="text-3xl font-black text-zinc-900">{{ number_format($stats['total_lost']) }}</span>
+                    <p class="mt-1 text-xs text-zinc-400">Total missing reports submitted</p>
+                </div>
             </div>
 
-            {{-- Pending Lost Reports --}}
-            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                        <h2 class="text-sm font-bold text-slate-900">Lost Reports Awaiting Review</h2>
-                    </div>
-                    <a href="{{ route('admin.reports.index', ['type' => 'lost']) }}" class="text-xs font-semibold text-brand-600 hover:text-brand-800">
-                        View All ({{ $stats['pending_lost'] }}) →
-                    </a>
+            {{-- Card 2: Total Found Items --}}
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Total Found Items</span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                        </svg>
+                    </span>
                 </div>
+                <div class="mt-4">
+                    <span class="text-3xl font-black text-zinc-900">{{ number_format($stats['total_found']) }}</span>
+                    <p class="mt-1 text-xs text-zinc-400">Belongings logged by finders</p>
+                </div>
+            </div>
 
-                @if ($pendingLost->isNotEmpty())
-                    <div class="divide-y divide-slate-100">
-                        @foreach ($pendingLost as $lost)
-                            <div class="flex items-center justify-between py-3">
-                                <div class="min-w-0">
-                                    <h3 class="text-xs font-bold text-slate-900 truncate">{{ $lost->item_name }}</h3>
-                                    <p class="text-[11px] text-slate-500 truncate">
-                                        Reported by {{ $lost->user->name }} · Last seen {{ $lost->location_last_seen }}
-                                    </p>
-                                </div>
-                                <a href="{{ route('admin.reports.show-lost', $lost) }}" class="rounded-lg bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-100 transition shrink-0 ml-2">
-                                    Review
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <p class="py-6 text-center text-xs text-slate-400">No lost items pending review.</p>
-                @endif
+            {{-- Card 3: Pending Claims --}}
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Pending Claims</span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-3xl font-black text-zinc-900">{{ number_format($stats['pending_claims']) }}</span>
+                    <p class="mt-1 text-xs text-zinc-400">Claims awaiting verification</p>
+                </div>
+            </div>
+
+            {{-- Card 4: Successfully Returned Items --}}
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Returned Items</span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-800">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-3xl font-black text-zinc-900">{{ number_format($stats['returned_items']) }}</span>
+                    <p class="mt-1 text-xs text-zinc-400">Safely reunited with owners</p>
+                </div>
             </div>
         </div>
 
-        {{-- Pending Claims Queue --}}
-        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h2 class="text-sm font-bold text-slate-900">Incoming Ownership Claims Awaiting Verification</h2>
-                <a href="{{ route('admin.claims.index') }}" class="text-xs font-semibold text-brand-600 hover:text-brand-800">
-                    Claims Desk ({{ $stats['open_claims'] }}) →
-                </a>
+        {{-- Section 1: Pending Claims Awaiting Approval (With Email Notification Trigger) --}}
+        <div class="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-lg font-black tracking-tight text-zinc-900">Pending Claim Requests</h2>
+                        @if ($pendingClaims->isNotEmpty())
+                            <span class="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-700">
+                                {{ $pendingClaims->count() }} action required
+                            </span>
+                        @endif
+                    </div>
+                    <p class="mt-1 text-xs text-zinc-500">
+                        Review student ownership claims. Approving sends an automated email notification letting the student know their item is ready for pickup at Administration Hall, Room 102.
+                    </p>
+                </div>
             </div>
 
             @if ($pendingClaims->isNotEmpty())
+                <div class="space-y-4">
+                    @foreach ($pendingClaims as $claim)
+                        <div class="rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 space-y-4 hover:border-zinc-300 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200/60 pb-3">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Claimant</span>
+                                    <h3 class="text-sm font-bold text-zinc-900">{{ $claim->claimant->name }}</h3>
+                                    <p class="text-xs text-zinc-500">{{ $claim->claimant->email }} {{ $claim->claimant->phone ? '· ' . $claim->claimant->phone : '' }}</p>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Date Submitted</span>
+                                    <p class="text-xs font-semibold text-zinc-700">{{ $claim->created_at->format('M d, Y h:i A') }}</p>
+                                    <span class="inline-block mt-0.5 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700">
+                                        {{ $claim->status->label() }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- Item Info & Ownership Proof --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {{-- Left: Found Item Claimed --}}
+                                <div class="space-y-1.5">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Claimed Belonging</span>
+                                    <div class="flex items-center gap-3">
+                                        @if ($claim->foundItem->photo_url)
+                                            <img src="{{ $claim->foundItem->photo_url }}" alt="" class="h-12 w-12 rounded-xl object-cover border border-zinc-200 shrink-0">
+                                        @else
+                                            <div class="h-12 w-12 rounded-xl bg-zinc-200 flex items-center justify-center text-zinc-400 text-xs shrink-0 font-bold">
+                                                ?
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <p class="text-sm font-bold text-zinc-900">{{ $claim->foundItem->item_name }}</p>
+                                            <p class="text-xs text-zinc-500">Found: {{ $claim->foundItem->location_found }} · {{ $claim->foundItem->date_found->format('M d, Y') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Right: Claimant Ownership Statement --}}
+                                <div class="space-y-1">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Student Ownership Proof</span>
+                                    <div class="rounded-xl bg-white p-3 border border-zinc-200 text-xs text-zinc-700 leading-relaxed">
+                                        {{ $claim->claim_description }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Approval Actions with Office Pickup Message --}}
+                            <div class="pt-2 border-t border-zinc-200/60 flex flex-wrap items-center justify-between gap-3">
+                                <div class="text-xs text-zinc-500">
+                                    Office: <strong>Administration Hall, Room 102</strong> (Mon-Fri, 8:00 AM – 5:00 PM)
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    {{-- Approve Claim Form (Sends Email) --}}
+                                    <form method="POST" action="{{ route('admin.claims.approve', $claim) }}" class="inline">
+                                        @csrf
+                                        <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at Administration Hall, Room 102. Please bring your School ID card.">
+                                        <button type="submit"
+                                                onclick="return confirm('Approve claim for {{ addslashes($claim->claimant->name) }}? This will email the student to retrieve the item in Room 102.');"
+                                                class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
+                                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                            </svg>
+                                            Approve &amp; Email Student
+                                        </button>
+                                    </form>
+
+                                    {{-- Reject Claim Button --}}
+                                    <a href="{{ route('admin.claims.show', $claim) }}"
+                                       class="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition">
+                                        Review Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="rounded-2xl border-2 border-dashed border-zinc-200 p-8 text-center text-zinc-400">
+                    <svg class="mx-auto h-8 w-8 text-zinc-300 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <p class="mt-2 text-xs font-semibold text-zinc-600">No pending claims awaiting review</p>
+                    <p class="text-[11px] text-zinc-400">All submitted claims have been reviewed and verified.</p>
+                </div>
+            @endif
+        </div>
+
+        {{-- Section 2: Approved Claims Ready for Handover at Office --}}
+        <div class="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-xs space-y-5">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+                <div>
+                    <h2 class="text-lg font-black tracking-tight text-zinc-900">Approved for Office Pickup</h2>
+                    <p class="mt-1 text-xs text-zinc-500">
+                        Students have been notified to retrieve these items at Administration Hall, Room 102. Record return once ID is verified.
+                    </p>
+                </div>
+            </div>
+
+            @if ($approvedClaims->isNotEmpty())
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-100">
+                        <thead class="border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                             <tr>
-                                <th class="pb-2">Claimed Item</th>
-                                <th class="pb-2">Claimant</th>
-                                <th class="pb-2">Submitted</th>
-                                <th class="pb-2">Status</th>
-                                <th class="pb-2 text-right">Action</th>
+                                <th class="pb-3">Item</th>
+                                <th class="pb-3">Claimant</th>
+                                <th class="pb-3">Approved Date</th>
+                                <th class="pb-3">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @foreach ($pendingClaims as $claim)
-                                <tr>
-                                    <td class="py-3 font-semibold text-slate-900">{{ $claim->foundItem->item_name }}</td>
-                                    <td class="py-3 text-slate-600">{{ $claim->claimant->name }}</td>
-                                    <td class="py-3 text-slate-500">{{ $claim->created_at->format('M d, Y h:i A') }}</td>
-                                    <td class="py-3"><x-status-badge :status="$claim->status" /></td>
-                                    <td class="py-3 text-right">
-                                        <a href="{{ route('admin.claims.show', $claim) }}" class="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 transition">
-                                            Verify Proof
-                                        </a>
+                        <tbody class="divide-y divide-zinc-100">
+                            @foreach ($approvedClaims as $approved)
+                                <tr class="hover:bg-zinc-50/50">
+                                    <td class="py-3 font-bold text-zinc-900">
+                                        {{ $approved->foundItem->item_name }}
+                                    </td>
+                                    <td class="py-3 text-zinc-700">
+                                        <span class="font-semibold">{{ $approved->claimant->name }}</span>
+                                        <span class="block text-[11px] text-zinc-400">{{ $approved->claimant->email }}</span>
+                                    </td>
+                                    <td class="py-3 text-zinc-500">
+                                        {{ $approved->approved_at ? $approved->approved_at->format('M d, Y h:i A') : 'Recently' }}
+                                    </td>
+                                    <td class="py-3">
+                                        <form method="POST" action="{{ route('admin.claims.record-return', $approved) }}" class="inline">
+                                            @csrf
+                                            <input type="hidden" name="identification_type" value="Student ID">
+                                            <input type="hidden" name="id_reference_number" value="Verified in Office">
+                                            <button type="submit"
+                                                    onclick="return confirm('Confirm physical handover to {{ addslashes($approved->claimant->name) }} with verified ID?');"
+                                                    class="rounded-lg bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition">
+                                                Mark Picked Up / Handed Over
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -143,8 +248,37 @@
                     </table>
                 </div>
             @else
-                <p class="py-6 text-center text-xs text-slate-400">No claims currently in verification queue.</p>
+                <p class="text-xs text-zinc-400 italic py-2">No approved items currently waiting for pickup.</p>
             @endif
         </div>
+
+        {{-- Section 3: Recent Reunited Items History --}}
+        @if ($recentReturns->isNotEmpty())
+            <div class="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-xs space-y-4">
+                <h2 class="text-lg font-black tracking-tight text-zinc-900">Successfully Returned Belongings</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                            <tr>
+                                <th class="pb-3">Item</th>
+                                <th class="pb-3">Owner Returned To</th>
+                                <th class="pb-3">Handed Over Date</th>
+                                <th class="pb-3">Recorded By</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-100">
+                            @foreach ($recentReturns as $ret)
+                                <tr>
+                                    <td class="py-3 font-bold text-zinc-900">{{ $ret->foundItem->item_name }}</td>
+                                    <td class="py-3 text-zinc-700">{{ $ret->claimRequest->claimant->name ?? 'Verified Student' }}</td>
+                                    <td class="py-3 text-zinc-500">{{ $ret->returned_at->format('M d, Y h:i A') }}</td>
+                                    <td class="py-3 text-zinc-400">{{ $ret->recordedBy->name ?? 'Administrator' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
     </div>
 </x-layouts.admin>

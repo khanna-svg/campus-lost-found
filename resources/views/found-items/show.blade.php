@@ -153,6 +153,18 @@
                         Back to Directory
                     </a>
                 </div>
+            @elseif (auth()->check() && $foundItem->status->value !== 'returned')
+                <div class="pt-4 border-t border-zinc-200 flex items-center justify-between">
+                    <a href="{{ route('claims.create', $foundItem) }}" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white hover:bg-zinc-800 transition shadow-xs">
+                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        Claim this item
+                    </a>
+                    <a href="{{ route('items.index') }}" class="text-xs font-semibold text-zinc-500 hover:text-black">
+                        Back to Directory
+                    </a>
+                </div>
             @endif
         </div>
     </div>

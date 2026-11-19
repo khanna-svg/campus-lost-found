@@ -1,31 +1,35 @@
-<x-layouts.admin title="Claims Verification Desk">
+<x-layouts.admin title="Claims Management">
     <div class="space-y-6">
         {{-- Header --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Claims Verification Desk</h1>
-                <p class="mt-1 text-sm text-slate-500">
-                    Verify claimant evidence against physical items and record official hand-overs.
+                <h1 class="text-2xl font-black tracking-tight text-zinc-900 sm:text-3xl">Claims Management</h1>
+                <p class="mt-1 text-xs sm:text-sm text-zinc-500">
+                    Verify claimant evidence, approve pickups, and record physical item handovers.
                 </p>
             </div>
+            <a href="{{ route('admin.dashboard') }}"
+               class="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 transition self-start sm:self-auto">
+                ← Back to Dashboard
+            </a>
         </div>
 
         {{-- Status Filter Badges --}}
-        <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3 text-xs">
-            <span class="text-slate-400 font-medium">Status:</span>
+        <div class="flex flex-wrap items-center gap-2 border-b border-zinc-200 pb-3 text-xs">
+            <span class="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">Filter:</span>
             @foreach ([
                 'pending' => 'Pending Queue (' . $counts['pending'] . ')',
                 'under_review' => 'In Review (' . $counts['under_review'] . ')',
                 'additional_information_required' => 'Info Requested (' . $counts['info_required'] . ')',
-                'approved' => 'Approved / Ready (' . $counts['approved'] . ')',
+                'approved' => 'Approved / Pickup (' . $counts['approved'] . ')',
                 'completed' => 'Returned (' . $counts['completed'] . ')',
                 'all' => 'All Claims',
             ] as $k => $label)
                 <a href="{{ route('admin.claims.index', ['status' => $k]) }}"
                    @class([
-                       'px-3 py-1 rounded-lg font-semibold transition',
-                       'bg-slate-900 text-white' => $status === $k,
-                       'bg-slate-100 text-slate-700 hover:bg-slate-200' => $status !== $k,
+                       'px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs',
+                       'bg-black text-white' => $status === $k,
+                       'bg-zinc-100 text-zinc-700 hover:bg-zinc-200' => $status !== $k,
                    ])>
                     {{ $label }}
                 </a>
@@ -33,47 +37,65 @@
         </div>
 
         {{-- Claims Table --}}
-        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 overflow-hidden">
+        <div class="rounded-3xl bg-white border border-zinc-200 shadow-xs overflow-hidden">
             @if ($claims->isNotEmpty())
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
+                        <thead class="bg-zinc-50 text-zinc-400 uppercase tracking-wider text-[10px] font-bold border-b border-zinc-200">
                             <tr>
-                                <th class="py-3 px-4">Claimed Item</th>
-                                <th class="py-3 px-4">Claimant</th>
-                                <th class="py-3 px-4">Date Submitted</th>
-                                <th class="py-3 px-4">Status</th>
-                                <th class="py-3 px-4 text-right">Action</th>
+                                <th class="py-3.5 px-5">Claimed Item</th>
+                                <th class="py-3.5 px-5">Claimant</th>
+                                <th class="py-3.5 px-5">Date Submitted</th>
+                                <th class="py-3.5 px-5">Status</th>
+                                <th class="py-3.5 px-5 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-zinc-100">
                             @foreach ($claims as $claim)
-                                <tr class="hover:bg-slate-50/50">
-                                    <td class="py-3 px-4 font-bold text-slate-900">
+                                <tr class="hover:bg-zinc-50/50">
+                                    <td class="py-3.5 px-5 font-bold text-zinc-900">
                                         <div class="flex items-center gap-3">
                                             @if ($claim->foundItem->photo_url)
-                                                <img src="{{ $claim->foundItem->photo_url }}" alt="" class="h-9 w-9 rounded-lg object-cover shrink-0">
+                                                <img src="{{ $claim->foundItem->photo_url }}" alt="" class="h-10 w-10 rounded-xl object-cover border border-zinc-200 shrink-0">
+                                            @else
+                                                <div class="h-10 w-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-400 font-bold shrink-0">
+                                                    ?
+                                                </div>
                                             @endif
                                             <div>
-                                                <span>{{ $claim->foundItem->item_name }}</span>
-                                                <span class="block text-[11px] text-slate-400 font-normal">{{ $claim->foundItem->category->name }}</span>
+                                                <span class="block text-zinc-900 font-bold">{{ $claim->foundItem->item_name }}</span>
+                                                <span class="block text-[11px] text-zinc-400 font-normal">{{ $claim->foundItem->category->name }}</span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-4 text-slate-600">
-                                        <span class="block font-medium text-slate-900">{{ $claim->claimant->name }}</span>
-                                        <span class="text-[11px] text-slate-400">{{ $claim->claimant->email }}</span>
+                                    <td class="py-3.5 px-5 text-zinc-600">
+                                        <span class="block font-bold text-zinc-900">{{ $claim->claimant->name }}</span>
+                                        <span class="text-[11px] text-zinc-400">{{ $claim->claimant->email }}</span>
                                     </td>
-                                    <td class="py-3 px-4 text-slate-500">
+                                    <td class="py-3.5 px-5 text-zinc-500">
                                         {{ $claim->created_at->format('M d, Y h:i A') }}
                                     </td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3.5 px-5">
                                         <x-status-badge :status="$claim->status" />
                                     </td>
-                                    <td class="py-3 px-4 text-right">
-                                        <a href="{{ route('admin.claims.show', $claim) }}" class="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 transition">
-                                            Verify Proof
-                                        </a>
+                                    <td class="py-3.5 px-5 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            @if (in_array($claim->status->value, ['pending', 'under_review']))
+                                                <form method="POST" action="{{ route('admin.claims.approve', $claim) }}" class="inline">
+                                                    @csrf
+                                                    <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at Administration Hall, Room 102. Please bring your School ID.">
+                                                    <button type="submit"
+                                                            onclick="return confirm('Approve claim and send email to {{ addslashes($claim->claimant->name) }}?');"
+                                                            class="rounded-xl bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition">
+                                                        Approve
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <a href="{{ route('admin.claims.show', $claim) }}"
+                                               class="rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs font-bold text-zinc-800 hover:bg-zinc-50 transition">
+                                                Review
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -81,11 +103,11 @@
                     </table>
                 </div>
 
-                <div class="p-4 border-t border-slate-100">
+                <div class="p-4 border-t border-zinc-100">
                     {{ $claims->links() }}
                 </div>
             @else
-                <p class="py-12 text-center text-xs text-slate-400">No claims match the selected status.</p>
+                <p class="py-12 text-center text-xs text-zinc-400">No claims match the selected status.</p>
             @endif
         </div>
     </div>

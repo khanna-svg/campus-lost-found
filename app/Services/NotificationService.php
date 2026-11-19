@@ -132,20 +132,33 @@ class NotificationService
     }
 
     /**
-     * 5. Claim Approved (Notifies Claimant)
+     * 5. Claim Approved (Notifies Claimant via in-app notification & email)
      */
     public function claimApproved(ClaimRequest $claim): AppNotification
     {
         $itemName = $claim->foundItem->item_name;
 
-        return $this->send(
+        // 1. In-App Notification
+        $notification = $this->send(
             $claim->claimant_id,
             'claim_approved',
             'Claim Approved · ' . $itemName,
-            "Your claim for '{$itemName}' was approved. Check retrieval instructions to collect your item.",
+            "Your claim for '{$itemName}' was approved! Your item is secured and ready for pickup at the Campus Lost & Found Office (Administration Hall, Room 102). Please bring your school ID.",
             'claim_request',
             $claim->id
         );
+
+        // 2. Email Notification to Student
+        if ($claim->claimant && $claim->claimant->email) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($claim->claimant->email)
+                    ->send(new \App\Mail\ClaimApprovedMail($claim));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("Failed to send claim approval email to {$claim->claimant->email}: " . $e->getMessage());
+            }
+        }
+
+        return $notification;
     }
 
     /**
