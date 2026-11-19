@@ -100,7 +100,7 @@
                         @endif
                     </div>
                     <p class="mt-1 text-xs text-zinc-500">
-                        Review student ownership claims. Approving sends an automated email notification letting the student know their item is ready for pickup at Administration Hall, Room 102.
+                        Review student ownership claims. Approving sends an automated email notification letting the student know their item is ready for pickup at the Admin Office.
                     </p>
                 </div>
             </div>
@@ -156,14 +156,14 @@
                             {{-- Approval Actions with Office Pickup Message --}}
                             <div class="pt-2 border-t border-zinc-200/60 flex flex-wrap items-center justify-between gap-3">
                                 <div class="text-xs text-zinc-500">
-                                    Office: <strong>Administration Hall, Room 102</strong> (Mon-Fri, 8:00 AM – 5:00 PM)
+                                    Office: <strong>Admin Office</strong> (Mon-Fri, 8:00 AM – 5:00 PM)
                                 </div>
 
                                 <div class="flex items-center gap-2">
                                     {{-- Approve Claim Form (Sends Email) --}}
                                     <form method="POST" action="{{ route('admin.claims.approve', $claim) }}" class="inline">
                                         @csrf
-                                        <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at Administration Hall, Room 102. Please bring your School ID card.">
+                                        <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at the Admin Office. Please bring your School ID card.">
                                         <button type="submit"
                                                 onclick="return confirm('Approve claim for {{ addslashes($claim->claimant->name) }}?');"
                                                 class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
@@ -201,7 +201,7 @@
                 <div>
                     <h2 class="text-lg font-black tracking-tight text-zinc-900">Approved for Office Pickup</h2>
                     <p class="mt-1 text-xs text-zinc-500">
-                        Students have been notified to retrieve these items at Administration Hall, Room 102. Record return once ID is verified.
+                        Students have been notified to retrieve these items at the Admin Office. Record return once ID is verified.
                     </p>
                 </div>
             </div>

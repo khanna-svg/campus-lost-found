@@ -143,7 +143,7 @@ class NotificationService
             $claim->claimant_id,
             'claim_approved',
             'Claim Approved · ' . $itemName,
-            "Your claim for '{$itemName}' was approved! Your item is secured and ready for pickup at the Campus Lost & Found Office (Administration Hall, Room 102). Please bring your school ID.",
+            "Your claim for '{$itemName}' was approved! Your item is secured and ready for pickup at the Admin Office. Please bring your school ID.",
             'claim_request',
             $claim->id
         );

@@ -112,7 +112,7 @@
                                 <textarea name="pickup_instructions"
                                           id="pickup_instructions"
                                           rows="2"
-                                          class="w-full rounded-xl border border-zinc-200 p-2.5 text-xs text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black">Your item is ready for pickup at the Campus Lost & Found Office (Administration Hall, Room 102). Please bring your School ID card.</textarea>
+                                          class="w-full rounded-xl border border-zinc-200 p-2.5 text-xs text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black">Your item is ready for pickup at the Admin Office. Please bring your School ID card.</textarea>
                             </div>
                             <button type="submit"
                                     onclick="return confirm('Approve this claim? This will automatically email {{ addslashes($claim->claimant->name) }} with pickup instructions.');"
@@ -128,7 +128,7 @@
                             @csrf
                             <div>
                                 <h4 class="text-sm font-bold text-white">Record Physical Return (Handover)</h4>
-                                <p class="text-xs text-zinc-400">Complete this when the student presents their School ID in Room 102 to retrieve the item.</p>
+                                <p class="text-xs text-zinc-400">Complete this when the student presents their School ID in the Admin Office to retrieve the item.</p>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs">
                                 <div>

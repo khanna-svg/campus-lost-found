@@ -35,7 +35,7 @@
             <div class="pickup-box">
                 <div class="pickup-title">Office Retrieval Details</div>
                 <div class="pickup-item">
-                    <strong>Pickup Location:</strong> Campus Lost &amp; Found Office (Administration Hall, Room 102)
+                    <strong>Pickup Location:</strong> Admin Office
                 </div>
                 <div class="pickup-item">
                     <strong>Office Hours:</strong> Monday – Friday, 8:00 AM – 5:00 PM

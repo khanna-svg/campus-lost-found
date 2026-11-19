@@ -83,7 +83,7 @@
                                             @if (in_array($claim->status->value, ['pending', 'under_review']))
                                                 <form method="POST" action="{{ route('admin.claims.approve', $claim) }}" class="inline">
                                                     @csrf
-                                                    <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at Administration Hall, Room 102. Please bring your School ID.">
+                                                    <input type="hidden" name="pickup_instructions" value="Your item is ready for pickup at the Admin Office. Please bring your School ID.">
                                                     <button type="submit"
                                                             onclick="return confirm('Approve claim and send email to {{ addslashes($claim->claimant->name) }}?');"
                                                             class="rounded-xl bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition">

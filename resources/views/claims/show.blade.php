@@ -107,8 +107,7 @@
                     <div class="grid sm:grid-cols-2 gap-3 pt-1">
                         <div>
                             <span class="text-zinc-500 block font-medium">Location</span>
-                            <span class="font-semibold text-white">Campus Security & Lost & Found Office</span>
-                            <span class="text-zinc-400 block">Administration Hall, Ground Floor Room 102</span>
+                            <span class="font-semibold text-white">Admin Office</span>
                         </div>
                         <div>
                             <span class="text-zinc-500 block font-medium">Office Hours</span>
