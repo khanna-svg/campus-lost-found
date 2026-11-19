@@ -11,7 +11,7 @@
             </nav>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                    <h1 class="text-2xl font-black tracking-tight text-zinc-900">Claim Verification Dossier</h1>
+                    <h1 class="text-2xl font-black tracking-tight text-zinc-900">Claim Verification</h1>
                     <p class="mt-1 text-xs text-zinc-500">
                         Claimant: <strong>{{ $claim->claimant->name }}</strong> ({{ $claim->claimant->email }}) · Submitted {{ $claim->created_at->format('M d, Y h:i A') }}
                     </p>
