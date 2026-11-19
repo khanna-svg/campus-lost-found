@@ -157,7 +157,9 @@
                                 @foreach ($recentLost as $item)
                                     <tr class="hover:bg-slate-50/75 transition-colors">
                                         <td class="py-3.5 font-medium text-slate-900">
-                                            {{ $item->item_name }}
+                                            <a href="{{ route('lost-items.show', $item) }}" class="text-brand-600 hover:text-brand-800 hover:underline">
+                                                {{ $item->item_name }}
+                                            </a>
                                             @if ($item->needs_correction)
                                                 <span class="ml-2 inline-flex items-center rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
                                                     Action Required
@@ -213,7 +215,9 @@
                                 @foreach ($recentFound as $item)
                                     <tr class="hover:bg-slate-50/75 transition-colors">
                                         <td class="py-3.5 font-medium text-slate-900">
-                                            {{ $item->item_name }}
+                                            <a href="{{ route('found-items.show', $item) }}" class="text-brand-600 hover:text-brand-800 hover:underline">
+                                                {{ $item->item_name }}
+                                            </a>
                                         </td>
                                         <td class="py-3.5">
                                             <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">

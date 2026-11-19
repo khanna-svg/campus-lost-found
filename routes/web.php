@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FoundItemController;
+use App\Http\Controllers\LostItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,10 +42,18 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     // Regular user dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Navigation & Quick Actions (Active placeholders until Phases 6, 7, 8)
+    // Lost Item Reporting (Module 2)
+    Route::get('/report-lost', [LostItemController::class, 'create'])->name('lost-items.create');
+    Route::post('/lost-items', [LostItemController::class, 'store'])->name('lost-items.store');
+    Route::get('/lost-items/{lostItem}', [LostItemController::class, 'show'])->name('lost-items.show');
+
+    // Found Item Reporting (Module 3)
+    Route::get('/report-found', [FoundItemController::class, 'create'])->name('found-items.create');
+    Route::post('/found-items', [FoundItemController::class, 'store'])->name('found-items.store');
+    Route::get('/found-items/{foundItem}', [FoundItemController::class, 'show'])->name('found-items.show');
+
+    // Active placeholders until Phases 7, 8
     Route::get('/items', [DashboardController::class, 'placeholderItems'])->name('items.index');
-    Route::get('/report-lost', [DashboardController::class, 'placeholderReportLost'])->name('lost-items.create');
-    Route::get('/report-found', [DashboardController::class, 'placeholderReportFound'])->name('found-items.create');
     Route::get('/my-claims', [DashboardController::class, 'placeholderClaims'])->name('claims.index');
 
     // Profile Management

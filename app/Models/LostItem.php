@@ -64,4 +64,20 @@ class LostItem extends Model
     {
         return $this->hasMany(ClaimRequest::class, 'lost_item_id');
     }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (! $this->photo_path) {
+            return null;
+        }
+
+        if (filter_var($this->photo_path, FILTER_VALIDATE_URL)) {
+            return $this->photo_path;
+        }
+
+        $base = config('supabase.url');
+        $bucket = config('supabase.buckets.photos', 'item-photos');
+
+        return "{$base}/storage/v1/object/public/{$bucket}/" . ltrim($this->photo_path, '/');
+    }
 }
