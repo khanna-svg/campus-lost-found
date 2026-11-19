@@ -275,27 +275,27 @@
                 <div id="modal-item-description" class="rounded-2xl border border-zinc-100 bg-zinc-50/70 p-5 text-sm leading-relaxed text-zinc-700 whitespace-pre-line"></div>
             </div>
 
-            {{-- Resolve Button (Authorized Poster or Admin) --}}
-            <div id="modal-resolve-container" class="hidden pt-3 border-t border-zinc-200 flex items-center justify-between">
-                <form id="modal-resolve-form" method="POST" action="">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" id="modal-resolve-btn" class="rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition"></button>
-                </form>
-                <button type="button" onclick="closeItemModal()" class="text-xs font-semibold text-zinc-500 hover:text-black">
-                    Close
-                </button>
-            </div>
+            {{-- Modal Actions Footer --}}
+            <div class="pt-4 border-t border-zinc-200 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    {{-- Resolve Button (Authorized Poster or Admin) --}}
+                    <form id="modal-resolve-form" method="POST" action="" class="hidden">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" id="modal-resolve-btn" class="rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition"></button>
+                    </form>
 
-            {{-- Claim Button (Found Items that are unresolved and not posted by the viewer) --}}
-            <div id="modal-claim-container" class="hidden pt-3 border-t border-zinc-200 flex items-center justify-between">
-                <a id="modal-claim-btn" href="" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
-                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                    Claim this item
-                </a>
-                <button type="button" onclick="closeItemModal()" class="text-xs font-semibold text-zinc-500 hover:text-black">
+                    {{-- Claim Button (Regular Students on other people's found items) --}}
+                    <a id="modal-claim-btn" href="" class="hidden inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
+                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        Claim this item
+                    </a>
+                </div>
+
+                {{-- Single Clean Close Button --}}
+                <button type="button" onclick="closeItemModal()" class="text-xs font-semibold text-zinc-500 hover:text-black transition cursor-pointer">
                     Close
                 </button>
             </div>
@@ -496,33 +496,30 @@
                 noImgBox.classList.remove('hidden');
             }
 
-            // Resolve button
-            const resolveContainer = document.getElementById('modal-resolve-container');
-            if (item.can_resolve) {
-                const form = document.getElementById('modal-resolve-form');
-                form.action = item.toggle_resolve_route;
-                const btn = document.getElementById('modal-resolve-btn');
-
+            // Resolve button (Authorized poster or Admin)
+            const resolveForm = document.getElementById('modal-resolve-form');
+            const resolveBtn = document.getElementById('modal-resolve-btn');
+            if (item.can_resolve && item.toggle_resolve_route) {
+                resolveForm.action = item.toggle_resolve_route;
                 if (item.is_resolved) {
-                    btn.textContent = 'Mark as Unresolved';
-                    btn.className = 'rounded-xl border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-800 hover:bg-zinc-50 transition';
+                    resolveBtn.textContent = 'Mark as Unresolved';
+                    resolveBtn.className = 'rounded-xl border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-800 hover:bg-zinc-50 transition cursor-pointer';
                 } else {
-                    btn.textContent = 'Mark as Resolved';
-                    btn.className = 'rounded-xl bg-black px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition';
+                    resolveBtn.textContent = 'Mark as Resolved';
+                    resolveBtn.className = 'rounded-xl bg-black px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition cursor-pointer';
                 }
-                resolveContainer.classList.remove('hidden');
+                resolveForm.classList.remove('hidden');
             } else {
-                resolveContainer.classList.add('hidden');
+                resolveForm.classList.add('hidden');
             }
 
-            // Claim button
-            const claimContainer = document.getElementById('modal-claim-container');
+            // Claim button (Students only, never Admins)
             const claimBtn = document.getElementById('modal-claim-btn');
             if (item.can_claim && item.claim_route) {
                 claimBtn.href = item.claim_route;
-                claimContainer.classList.remove('hidden');
+                claimBtn.classList.remove('hidden');
             } else {
-                claimContainer.classList.add('hidden');
+                claimBtn.classList.add('hidden');
             }
 
             // Display modal

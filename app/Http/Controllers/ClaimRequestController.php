@@ -37,6 +37,12 @@ class ClaimRequestController extends Controller
     {
         $user = $request->user();
 
+        // Guard against administrators submitting claims
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.claims.index')
+                ->with('error', 'Administrators verify claims and cannot file claim requests.');
+        }
+
         // 1. Guard against claiming own report
         if ($foundItem->user_id === $user->id) {
             return redirect()->route('found-items.show', $foundItem)
@@ -82,6 +88,11 @@ class ClaimRequestController extends Controller
         \App\Services\NotificationService $notifications
     ): RedirectResponse
     {
+        if ($request->user()->isAdmin()) {
+            return redirect()->route('admin.claims.index')
+                ->with('error', 'Administrators cannot file claim requests.');
+        }
+
         $evidencePaths = [];
 
         if ($request->hasFile('evidence')) {
