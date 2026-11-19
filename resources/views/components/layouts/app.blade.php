@@ -26,9 +26,8 @@
                 @auth
                     @if (auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}"
-                           class="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 hover:text-black transition flex items-center gap-1.5 ml-1">
-                            <span class="inline-flex items-center rounded-md bg-black px-1.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">Admin</span>
-                            <span>Portal</span>
+                           class="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 hover:text-black transition ml-1">
+                            Admin Portal
                         </a>
                     @endif
                 @endauth
@@ -142,9 +141,8 @@
                 @endforeach
                 @auth
                     @if (auth()->user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-semibold text-black bg-zinc-100 flex items-center justify-between">
-                            <span>Admin Portal</span>
-                            <span class="rounded bg-black px-1.5 py-0.5 text-[10px] text-white uppercase font-bold">Admin</span>
+                        <a href="{{ route('admin.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-semibold text-black bg-zinc-100">
+                            Admin Portal
                         </a>
                     @endif
                     <a href="{{ route('profile.show') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">Account Profile</a>

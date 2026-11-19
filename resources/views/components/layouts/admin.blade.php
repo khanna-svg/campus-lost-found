@@ -13,7 +13,7 @@
             {{-- Brand & Desktop Navigation --}}
             <div class="flex items-center gap-6">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center">
-                    <x-brand-logo badge-text="Admin" />
+                    <x-brand-logo />
                 </a>
 
                 {{-- Desktop Navigation Links in Header --}}
