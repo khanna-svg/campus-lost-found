@@ -120,7 +120,6 @@
                             @csrf
                             <div>
                                 <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900">Approve Claim</h4>
-                                <p class="text-[11px] text-zinc-500">Instructs the student that their claim is verified and ready for pickup at Administration Hall, Room 102.</p>
                             </div>
                             <div>
                                 <label for="pickup_instructions" class="block text-xs font-bold text-zinc-800 mb-1">Pickup Instructions</label>
