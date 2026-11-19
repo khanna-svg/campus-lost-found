@@ -285,13 +285,15 @@
                         <button type="submit" id="modal-resolve-btn" class="rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition"></button>
                     </form>
 
-                    {{-- Claim Button (Regular Students on other people's found items) --}}
-                    <a id="modal-claim-btn" href="" class="hidden inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
-                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                        Claim this item
-                    </a>
+                    {{-- Claim Button (Regular Students on other people's found items, strictly non-admin) --}}
+                    @if (auth()->check() && ! auth()->user()->isAdmin())
+                        <a id="modal-claim-btn" href="" class="hidden inline-flex items-center gap-1.5 rounded-xl bg-black px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-zinc-800 transition">
+                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                            Claim this item
+                        </a>
+                    @endif
                 </div>
 
                 {{-- Single Clean Close Button --}}
@@ -515,11 +517,13 @@
 
             // Claim button (Students only, never Admins)
             const claimBtn = document.getElementById('modal-claim-btn');
-            if (item.can_claim && item.claim_route) {
-                claimBtn.href = item.claim_route;
-                claimBtn.classList.remove('hidden');
-            } else {
-                claimBtn.classList.add('hidden');
+            if (claimBtn) {
+                if (item.can_claim && item.claim_route) {
+                    claimBtn.href = item.claim_route;
+                    claimBtn.classList.remove('hidden');
+                } else {
+                    claimBtn.classList.add('hidden');
+                }
             }
 
             // Display modal

@@ -211,14 +211,14 @@ class ItemDiscoveryController extends Controller
                 : route('lost-items.toggle-resolve', $item->id);
 
             // Claim action for students on unresolved found items (strictly non-admin)
-            $item->can_claim = auth()->check()
+            $canClaim = auth()->check()
                 && ! auth()->user()->isAdmin()
                 && $item->item_type === 'found'
                 && ! $isResolved
                 && auth()->id() !== $item->user_id;
-            $item->claim_route = $item->item_type === 'found'
-                ? route('claims.create', $item->id)
-                : null;
+
+            $item->can_claim = $canClaim;
+            $item->claim_route = $canClaim ? route('claims.create', $item->id) : null;
 
             return $item;
         });
