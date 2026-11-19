@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
+use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ClaimVerificationController as AdminClaimVerificationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -95,6 +97,11 @@ Route::middleware(['auth', 'active', 'password.changed', 'role:admin'])
     ->group(function () {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
 
+        // Reports, Analytics & Exports (Module 8 - Phase 11)
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/reports/export-csv', [AdminAnalyticsController::class, 'exportReportsCsv'])->name('reports.export-csv');
+        Route::get('/claims/export-csv', [AdminAnalyticsController::class, 'exportClaimsCsv'])->name('claims.export-csv');
+
         // Report Review (Module 7 - Phase 10)
         Route::get('/reports', [AdminReportReviewController::class, 'index'])->name('reports.index');
         Route::get('/reports/lost/{lostItem}', [AdminReportReviewController::class, 'showLost'])->name('reports.show-lost');
@@ -126,4 +133,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'role:admin'])
         Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
         Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
         Route::post('/categories/{category}/toggle-active', [AdminCategoryController::class, 'toggleActive'])->name('categories.toggle-active');
+
+        // Append-Only Activity Audit Logs (Module 8 - Phase 11)
+        Route::get('/logs', [AdminActivityLogController::class, 'index'])->name('logs.index');
     });

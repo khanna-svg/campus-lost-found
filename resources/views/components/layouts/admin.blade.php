@@ -4,6 +4,8 @@
         ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'match' => 'admin.dashboard'],
         ['label' => 'Report Review', 'route' => 'admin.reports.index', 'match' => 'admin.reports.*'],
         ['label' => 'Claim Verification', 'route' => 'admin.claims.index', 'match' => 'admin.claims.*'],
+        ['label' => 'Analytics & Reports', 'route' => 'admin.analytics.index', 'match' => 'admin.analytics.*'],
+        ['label' => 'Audit Trail', 'route' => 'admin.logs.index', 'match' => 'admin.logs.*'],
         ['label' => 'User Accounts', 'route' => 'admin.users.index', 'match' => 'admin.users.*'],
         ['label' => 'Item Categories', 'route' => 'admin.categories.index', 'match' => 'admin.categories.*'],
         ['label' => 'My Profile', 'route' => 'profile.show', 'match' => 'profile.*'],
