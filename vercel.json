@@ -16,6 +16,8 @@
         "APP_ENV": "production",
         "APP_DEBUG": "false",
         "APP_SERVERLESS": "true",
+        "CACHE_STORE": "database",
+        "SESSION_DRIVER": "database",
         "LOG_CHANNEL": "stderr",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",

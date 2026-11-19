@@ -94,6 +94,6 @@ class AuthenticationTest extends TestCase
         $response = $this->actingAs($admin)->get('/admin');
 
         $response->assertStatus(200);
-        $response->assertSee('Administrator dashboard');
+        $response->assertSee('Administrative Dashboard');
     }
 }

@@ -19,6 +19,8 @@ $app = Application::configure(basePath: dirname(__DIR__))
         // Laravel generates https:// links and secure cookies correctly.
         $middleware->trustProxies(at: '*');
 
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+
         $middleware->alias([
             'role' => EnsureRole::class,
             'active' => EnsureUserIsActive::class,

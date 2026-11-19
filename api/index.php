@@ -1,7 +1,24 @@
 <?php
 
 /**
- * Vercel serverless entry point.
- * Every request is forwarded to Laravel's normal front controller.
+ * Vercel Serverless Entry Point
+ * Sets up writable directories in /tmp before forwarding to Laravel's front controller.
  */
-require __DIR__.'/../public/index.php';
+
+$tmpDirs = [
+    '/tmp/storage/framework/views',
+    '/tmp/storage/framework/cache/data',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/logs',
+    '/tmp/bootstrap/cache',
+];
+
+foreach ($tmpDirs as $dir) {
+    if (! is_dir($dir)) {
+        @mkdir($dir, 0755, true);
+    }
+}
+
+putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
+
+require __DIR__ . '/../public/index.php';
