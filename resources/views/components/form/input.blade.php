@@ -15,9 +15,9 @@
 @endphp
 
 <div>
-    <label for="{{ $id }}" class="mb-1.5 block text-sm font-medium text-slate-700">
+    <label for="{{ $id }}" class="mb-1.5 block text-sm font-medium text-zinc-800">
         {{ $label }}
-        @if ($required)<span class="text-red-600" aria-hidden="true">*</span>@endif
+        @if ($required)<span class="text-zinc-900 font-bold" aria-hidden="true">*</span>@endif
     </label>
 
     <input
@@ -30,10 +30,10 @@
         @if ($hasError) aria-invalid="true" @endif
         @if ($describedBy !== '') aria-describedby="{{ $describedBy }}" @endif
         {{ $attributes->except('id')->class([
-            'block w-full rounded-lg border-0 px-3 py-2.5 text-sm text-slate-900 shadow-sm ring-1 ring-inset placeholder:text-slate-400 focus:ring-2 focus:ring-inset',
-            'ring-slate-300 focus:ring-brand-500' => ! $hasError,
+            'block w-full rounded-lg border-0 px-3 py-2.5 text-sm text-zinc-900 shadow-sm ring-1 ring-inset placeholder:text-zinc-400 focus:ring-2 focus:ring-inset',
+            'ring-zinc-300 focus:ring-black' => ! $hasError,
             'ring-red-400 focus:ring-red-500' => $hasError,
-            'bg-slate-50 text-slate-500' => $readonly,
+            'bg-zinc-50 text-zinc-500' => $readonly,
         ]) }}
     >
 

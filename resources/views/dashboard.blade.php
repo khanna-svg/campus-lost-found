@@ -3,10 +3,10 @@
         {{-- Hero / Welcome Section --}}
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
                     Welcome back, {{ $user->name }} 👋
                 </h1>
-                <p class="mt-1 text-sm text-slate-500">
+                <p class="mt-1 text-sm text-zinc-500">
                     {{ config('campus.school_name') }} · Lost & Found Central Portal
                 </p>
             </div>
@@ -14,7 +14,7 @@
             {{-- Quick Actions --}}
             <div class="flex flex-wrap items-center gap-2.5">
                 <a href="{{ route('lost-items.create') }}"
-                   class="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                   class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -22,19 +22,19 @@
                 </a>
 
                 <a href="{{ route('found-items.create') }}"
-                   class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 transition hover:bg-slate-50">
-                    <svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                   class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm ring-1 ring-inset ring-zinc-300 transition hover:bg-zinc-50 hover:text-black">
+                    <svg class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                     Report Found Item
                 </a>
 
                 <a href="{{ route('items.index') }}"
-                   class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 transition hover:bg-slate-50">
-                    <svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                   class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm ring-1 ring-inset ring-zinc-300 transition hover:bg-zinc-50 hover:text-black">
+                    <svg class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
-                    Browse Listings
+                    Browse Directory
                 </a>
             </div>
         </div>
@@ -44,8 +44,7 @@
             <x-stat-card
                 title="Active Lost Reports"
                 :value="$stats['active_lost']"
-                description="Under review or published"
-                color="amber"
+                description="Under review or missing"
             >
                 <x-slot:icon>
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -58,7 +57,6 @@
                 title="Found Items Logged"
                 :value="$stats['found_reported']"
                 description="Submitted by you"
-                color="indigo"
             >
                 <x-slot:icon>
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -70,8 +68,7 @@
             <x-stat-card
                 title="Active Claims"
                 :value="$stats['pending_claims']"
-                description="Awaiting return or review"
-                color="brand"
+                description="Awaiting review"
             >
                 <x-slot:icon>
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -84,7 +81,6 @@
                 title="Reunited Belongings"
                 :value="$stats['resolved']"
                 description="Successfully returned"
-                color="emerald"
             >
                 <x-slot:icon>
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -95,33 +91,33 @@
         </div>
 
         {{-- Submissions & Activity Section with Interactive Tabs --}}
-        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200">
             {{-- Tab Headers --}}
-            <div class="border-b border-slate-200 px-6 pt-5">
+            <div class="border-b border-zinc-200 px-6 pt-5">
                 <div class="flex flex-wrap items-center justify-between gap-4 pb-4">
                     <div>
-                        <h2 class="text-base font-semibold text-slate-900">My Reports & Claims</h2>
-                        <p class="text-xs text-slate-500">Track current status and updates for your items</p>
+                        <h2 class="text-base font-bold text-zinc-900">My Reports & Claims</h2>
+                        <p class="text-xs text-zinc-500">Track current status and updates for your items</p>
                     </div>
 
-                    <div class="flex gap-1.5 rounded-xl bg-slate-100 p-1" role="tablist">
+                    <div class="flex gap-1.5 rounded-xl bg-zinc-100 p-1" role="tablist">
                         <button type="button"
                                 data-tab-target="tab-lost"
-                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-semibold text-brand-700 bg-white shadow-sm transition"
+                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-semibold text-white bg-black shadow-sm transition"
                                 role="tab"
                                 aria-selected="true">
                             Lost Reports ({{ $recentLost->count() }})
                         </button>
                         <button type="button"
                                 data-tab-target="tab-found"
-                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition"
+                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-black transition"
                                 role="tab"
                                 aria-selected="false">
                             Found Reports ({{ $recentFound->count() }})
                         </button>
                         <button type="button"
                                 data-tab-target="tab-claims"
-                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition"
+                                class="dashboard-tab rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-black transition"
                                 role="tab"
                                 aria-selected="false">
                             My Claims ({{ $recentClaims->count() }})
@@ -137,14 +133,14 @@
                         title="No lost items reported yet"
                         description="If you misplaced an item on campus, create a report so the school community and administration can assist in finding it."
                     >
-                        <a href="{{ route('lost-items.create') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-700">
+                        <a href="{{ route('lost-items.create') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-zinc-800 transition">
                             + Report a Lost Item
                         </a>
                     </x-empty-state>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead class="border-b border-slate-100 text-xs font-semibold uppercase text-slate-400">
+                        <table class="w-full text-left text-sm text-zinc-600">
+                            <thead class="border-b border-zinc-100 text-xs font-semibold uppercase text-zinc-400">
                                 <tr>
                                     <th class="pb-3">Item Name</th>
                                     <th class="pb-3">Category</th>
@@ -153,28 +149,28 @@
                                     <th class="pb-3">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-zinc-100">
                                 @foreach ($recentLost as $item)
-                                    <tr class="hover:bg-slate-50/75 transition-colors">
-                                        <td class="py-3.5 font-medium text-slate-900">
-                                            <a href="{{ route('lost-items.show', $item) }}" class="text-brand-600 hover:text-brand-800 hover:underline">
+                                    <tr class="hover:bg-zinc-50/75 transition-colors">
+                                        <td class="py-3.5 font-medium text-zinc-900">
+                                            <a href="{{ route('lost-items.show', $item) }}" class="text-black font-semibold hover:underline">
                                                 {{ $item->item_name }}
                                             </a>
                                             @if ($item->needs_correction)
-                                                <span class="ml-2 inline-flex items-center rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+                                                <span class="ml-2 inline-flex items-center rounded-md bg-zinc-900 text-white px-2 py-0.5 text-[10px] font-bold">
                                                     Action Required
                                                 </span>
                                             @endif
                                         </td>
                                         <td class="py-3.5">
-                                            <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                                            <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800">
                                                 {{ $item->category->name ?? 'General' }}
                                             </span>
                                         </td>
-                                        <td class="py-3.5 text-xs text-slate-500">
+                                        <td class="py-3.5 text-xs text-zinc-500">
                                             {{ $item->date_lost->format('M d, Y') }}
                                         </td>
-                                        <td class="py-3.5 text-xs text-slate-500">
+                                        <td class="py-3.5 text-xs text-zinc-500">
                                             {{ $item->location_last_seen }}
                                         </td>
                                         <td class="py-3.5">
@@ -195,14 +191,14 @@
                         title="No found items reported yet"
                         description="Did you find someone's belongings on campus? Report it here so the rightful owner can verify and claim it."
                     >
-                        <a href="{{ route('found-items.create') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2 text-xs font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50">
+                        <a href="{{ route('found-items.create') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-zinc-800 transition">
                             + Report a Found Item
                         </a>
                     </x-empty-state>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead class="border-b border-slate-100 text-xs font-semibold uppercase text-slate-400">
+                        <table class="w-full text-left text-sm text-zinc-600">
+                            <thead class="border-b border-zinc-100 text-xs font-semibold uppercase text-zinc-400">
                                 <tr>
                                     <th class="pb-3">Item Name</th>
                                     <th class="pb-3">Category</th>
@@ -211,23 +207,23 @@
                                     <th class="pb-3">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-zinc-100">
                                 @foreach ($recentFound as $item)
-                                    <tr class="hover:bg-slate-50/75 transition-colors">
-                                        <td class="py-3.5 font-medium text-slate-900">
-                                            <a href="{{ route('found-items.show', $item) }}" class="text-brand-600 hover:text-brand-800 hover:underline">
+                                    <tr class="hover:bg-zinc-50/75 transition-colors">
+                                        <td class="py-3.5 font-medium text-zinc-900">
+                                            <a href="{{ route('found-items.show', $item) }}" class="text-black font-semibold hover:underline">
                                                 {{ $item->item_name }}
                                             </a>
                                         </td>
                                         <td class="py-3.5">
-                                            <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                                            <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800">
                                                 {{ $item->category->name ?? 'General' }}
                                             </span>
                                         </td>
-                                        <td class="py-3.5 text-xs text-slate-500">
+                                        <td class="py-3.5 text-xs text-zinc-500">
                                             {{ $item->date_found->format('M d, Y') }}
                                         </td>
-                                        <td class="py-3.5 text-xs text-slate-500">
+                                        <td class="py-3.5 text-xs text-zinc-500">
                                             {{ $item->location_found }}
                                         </td>
                                         <td class="py-3.5">
@@ -248,14 +244,14 @@
                         title="No claim requests submitted"
                         description="If you see an item listed that matches your lost belongings, click 'Claim Item' on its details page to submit proof of ownership."
                     >
-                        <a href="{{ route('items.index') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-700">
-                            Browse Listings
+                        <a href="{{ route('items.index') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-black px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-zinc-800 transition">
+                            Browse Directory
                         </a>
                     </x-empty-state>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead class="border-b border-slate-100 text-xs font-semibold uppercase text-slate-400">
+                        <table class="w-full text-left text-sm text-zinc-600">
+                            <thead class="border-b border-zinc-100 text-xs font-semibold uppercase text-zinc-400">
                                 <tr>
                                     <th class="pb-3">Claimed Item</th>
                                     <th class="pb-3">Category</th>
@@ -264,18 +260,20 @@
                                     <th class="pb-3">Instructions / Notice</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-zinc-100">
                                 @foreach ($recentClaims as $claim)
-                                    <tr class="hover:bg-slate-50/75 transition-colors">
-                                        <td class="py-3.5 font-medium text-slate-900">
-                                            {{ $claim->foundItem->item_name ?? 'Item' }}
+                                    <tr class="hover:bg-zinc-50/75 transition-colors">
+                                        <td class="py-3.5 font-medium text-zinc-900">
+                                            <a href="{{ route('claims.show', $claim) }}" class="text-black font-semibold hover:underline">
+                                                {{ $claim->foundItem->item_name ?? 'Item' }}
+                                            </a>
                                         </td>
                                         <td class="py-3.5">
-                                            <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                                            <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800">
                                                 {{ $claim->foundItem->category->name ?? 'General' }}
                                             </span>
                                         </td>
-                                        <td class="py-3.5 text-xs text-slate-500">
+                                        <td class="py-3.5 text-xs text-zinc-500">
                                             {{ $claim->created_at->format('M d, Y') }}
                                         </td>
                                         <td class="py-3.5">
@@ -283,11 +281,11 @@
                                         </td>
                                         <td class="py-3.5 text-xs">
                                             @if ($claim->admin_message)
-                                                <span class="text-brand-700 font-medium">{{ $claim->admin_message }}</span>
+                                                <span class="text-zinc-900 font-medium">{{ $claim->admin_message }}</span>
                                             @elseif ($claim->pickup_instructions)
-                                                <span class="text-emerald-700 font-medium">{{ $claim->pickup_instructions }}</span>
+                                                <span class="text-black font-semibold underline">{{ $claim->pickup_instructions }}</span>
                                             @else
-                                                <span class="text-slate-400">Under administrator review</span>
+                                                <span class="text-zinc-400">Under administrator review</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -300,24 +298,24 @@
         </div>
 
         {{-- Information & Retrieval Guidelines Banner --}}
-        <div class="rounded-2xl bg-slate-900 p-6 text-white sm:p-8">
+        <div class="rounded-2xl bg-black p-6 text-white sm:p-8 border border-zinc-800">
             <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div class="max-w-2xl space-y-2">
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-500/20 px-3 py-1 text-xs font-medium text-brand-300 ring-1 ring-inset ring-brand-500/30">
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ring-inset ring-zinc-700">
                         Campus Guidelines
                     </span>
-                    <h3 class="text-lg font-semibold tracking-tight text-white sm:text-xl">
+                    <h3 class="text-lg font-bold tracking-tight text-white sm:text-xl">
                         How Verification & Retrieval Works
                     </h3>
-                    <p class="text-xs leading-relaxed text-slate-300 sm:text-sm">
+                    <p class="text-xs leading-relaxed text-zinc-400 sm:text-sm">
                         To maintain fair and secure item recovery, sensitive identifying characteristics of found items are kept private. When claiming an item, provide specific identifying marks, serial numbers, or unique details that only the true owner would know.
                     </p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3">
                     <a href="{{ route('items.index') }}"
-                       class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100">
-                        Search Found Belongings
+                       class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-black shadow-sm transition hover:bg-zinc-100">
+                        Search Belongings
                     </a>
                 </div>
             </div>

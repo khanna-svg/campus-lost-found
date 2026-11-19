@@ -9,13 +9,15 @@
     ];
 @endphp
 <x-layouts.base :title="$title">
-    <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <a href="{{ route('home') }}" class="flex items-center gap-2 font-semibold text-slate-900">
-                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 font-bold tracking-tight text-zinc-900">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black text-white shadow-sm ring-1 ring-black">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
                 </span>
-                <span class="hidden font-bold tracking-tight sm:inline">{{ config('app.name') }}</span>
+                <span class="text-base font-bold tracking-tight text-black sm:inline">{{ config('app.name') }}</span>
             </a>
 
             <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
@@ -23,8 +25,8 @@
                     <a href="{{ route($item['route']) }}"
                        @class([
                            'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                           'bg-brand-50 text-brand-700' => request()->routeIs($item['match']),
-                           'text-slate-600 hover:bg-slate-100 hover:text-slate-900' => ! request()->routeIs($item['match']),
+                           'bg-zinc-100 text-black font-semibold' => request()->routeIs($item['match']),
+                           'text-zinc-600 hover:bg-zinc-50 hover:text-black' => ! request()->routeIs($item['match']),
                        ])
                        @if (request()->routeIs($item['match'])) aria-current="page" @endif>{{ $item['label'] }}</a>
                 @endforeach
@@ -37,15 +39,15 @@
                         $navUnreadCount = auth()->user()->unreadNotifications()->count();
                     @endphp
                     <a href="{{ route('notifications.index') }}"
-                       class="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition focus:outline-none focus:ring-2 focus:ring-brand-500"
+                       class="relative rounded-full p-2 text-zinc-600 hover:bg-zinc-100 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-black"
                        title="Notification Center">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                         </svg>
                         @if ($navUnreadCount > 0)
                             <span class="absolute top-1.5 right-1.5 flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"></span>
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
                             </span>
                         @endif
                     </a>
@@ -58,41 +60,41 @@
                             data-dropdown-toggle="user-menu-dropdown"
                             aria-expanded="false"
                             aria-haspopup="true"
-                            class="flex items-center gap-2.5 rounded-full p-1.5 text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700">
+                            class="flex items-center gap-2.5 rounded-full p-1.5 text-zinc-700 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-black">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-black font-semibold text-white">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </span>
                         <div class="text-left leading-tight hidden md:block">
-                            <span class="block text-xs font-semibold text-slate-900">{{ auth()->user()->name }}</span>
-                            <span class="block text-[11px] text-slate-500">{{ auth()->user()->email }}</span>
+                            <span class="block text-xs font-semibold text-zinc-900">{{ auth()->user()->name }}</span>
+                            <span class="block text-[11px] text-zinc-500">{{ auth()->user()->email }}</span>
                         </div>
-                        <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <svg class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>
 
                     <div id="user-menu-dropdown"
-                         class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-900/5 focus:outline-none z-50"
+                         class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white p-2 shadow-lg ring-1 ring-zinc-900/10 focus:outline-none z-50"
                          role="menu"
                          aria-orientation="vertical"
                          aria-labelledby="user-menu-button">
-                        <div class="border-b border-slate-100 px-3 py-2.5">
-                            <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Institutional Account</p>
-                            <p class="truncate text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
-                            <p class="truncate text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
-                            <span class="mt-1.5 inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
+                        <div class="border-b border-zinc-100 px-3 py-2.5">
+                            <p class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Institutional Account</p>
+                            <p class="truncate text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
+                            <p class="truncate text-xs text-zinc-600 font-medium">{{ auth()->user()->email }}</p>
+                            <span class="mt-1.5 inline-block rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-800">
                                 {{ auth()->user()->role->label() }}
                             </span>
                         </div>
 
                         <div class="py-1">
-                            <a href="{{ route('profile.show') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900" role="menuitem">
-                                <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                            <a href="{{ route('profile.show') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black" role="menuitem">
+                                <svg class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
                                 Account Profile
                             </a>
                         </div>
 
-                        <div class="border-t border-slate-100 pt-1">
+                        <div class="border-t border-zinc-100 pt-1">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50" role="menuitem">
@@ -106,7 +108,7 @@
 
                 {{-- Mobile hamburger button --}}
                 <button type="button" data-nav-toggle="mobile-menu" aria-expanded="false" aria-controls="mobile-menu"
-                        class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden">
+                        class="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 lg:hidden">
                     <span class="sr-only">Toggle menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
@@ -114,18 +116,18 @@
         </div>
 
         {{-- Mobile dropdown menu --}}
-        <div id="mobile-menu" class="hidden border-t border-slate-200 bg-white lg:hidden">
-            <div class="border-b border-slate-100 px-4 py-3 bg-slate-50">
-                <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Institutional Account</p>
-                <p class="text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
-                <p class="text-xs text-brand-700 font-medium">{{ auth()->user()->email }}</p>
+        <div id="mobile-menu" class="hidden border-t border-zinc-200 bg-white lg:hidden">
+            <div class="border-b border-zinc-100 px-4 py-3 bg-zinc-50">
+                <p class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Institutional Account</p>
+                <p class="text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
+                <p class="text-xs text-zinc-600 font-medium">{{ auth()->user()->email }}</p>
             </div>
             <nav class="flex flex-col gap-1 px-4 py-3" aria-label="Mobile">
                 @foreach ($nav as $item)
-                    <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">{{ $item['label'] }}</a>
+                    <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">{{ $item['label'] }}</a>
                 @endforeach
-                <a href="{{ route('profile.show') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Account Profile</a>
-                <form method="POST" action="{{ route('logout') }}" class="pt-1 border-t border-slate-100">
+                <a href="{{ route('profile.show') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">Account Profile</a>
+                <form method="POST" action="{{ route('logout') }}" class="pt-1 border-t border-zinc-100">
                     @csrf
                     <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50">Sign out</button>
                 </form>

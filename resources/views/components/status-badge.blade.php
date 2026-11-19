@@ -2,10 +2,20 @@
 
 @php
     $label = is_object($status) && method_exists($status, 'label') ? $status->label() : ucwords(str_replace('_', ' ', (string) $status));
-    $colorClass = is_object($status) && method_exists($status, 'colorClass') ? $status->colorClass() : 'bg-slate-100 text-slate-700 ring-slate-200';
+    $raw = is_object($status) ? ($status->value ?? (string) $status) : (string) $status;
+
+    // High-contrast modern monochrome badge styling
+    $badgeStyle = match ($raw) {
+        'approved', 'completed', 'returned' => 'bg-black text-white ring-black',
+        'pending_review', 'pending', 'under_review' => 'bg-zinc-100 text-zinc-900 ring-zinc-300',
+        'additional_information_required' => 'bg-zinc-900 text-white ring-zinc-900',
+        'rejected' => 'bg-zinc-100 text-zinc-600 line-through ring-zinc-300',
+        'claimed', 'resolved' => 'bg-zinc-800 text-white ring-zinc-800',
+        default => 'bg-zinc-100 text-zinc-700 ring-zinc-200',
+    };
 @endphp
 
-<span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset {{ $colorClass }}">
+<span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset {{ $badgeStyle }}">
     <span class="h-1.5 w-1.5 rounded-full bg-current opacity-75"></span>
     {{ $label }}
 </span>

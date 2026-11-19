@@ -1,19 +1,19 @@
-<x-layouts.app title="My profile">
+<x-layouts.app title="My Profile">
     <div class="mx-auto max-w-2xl space-y-8">
         <div>
-            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">My profile</h1>
-            <p class="mt-1 text-sm text-slate-500">Manage your contact details and password.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900">My Profile</h1>
+            <p class="mt-1 text-sm text-zinc-500">Manage your contact details and password.</p>
         </div>
 
         @if ($user->must_change_password)
-            <div class="rounded-xl bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
+            <div class="rounded-xl border border-zinc-900 bg-zinc-100 p-4 text-sm text-zinc-900 font-medium">
                 You are using a temporary password. Please choose a new one below to continue.
             </div>
         @endif
 
         {{-- Account details --}}
-        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <h2 class="text-base font-semibold text-slate-900">Account details</h2>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200">
+            <h2 class="text-base font-bold text-zinc-900">Account details</h2>
             <form method="POST" action="{{ route('profile.update') }}" class="mt-5 space-y-5" novalidate>
                 @csrf
                 @method('PUT')
@@ -36,8 +36,8 @@
         </section>
 
         {{-- Password --}}
-        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <h2 class="text-base font-semibold text-slate-900">Change password</h2>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200">
+            <h2 class="text-base font-bold text-zinc-900">Change password</h2>
             <form method="POST" action="{{ route('profile.password.update') }}" class="mt-5 space-y-5" novalidate>
                 @csrf
                 @method('PUT')
