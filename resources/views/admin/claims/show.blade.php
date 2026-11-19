@@ -78,10 +78,25 @@
 
                     <div class="rounded-2xl bg-zinc-50 p-4 border border-zinc-100">
                         <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-1">Ownership Statement</span>
-                        <p class="text-xs text-zinc-800 font-medium whitespace-pre-line leading-relaxed">{{ $claim->claim_description }}</p>
+                        <p class="text-xs text-zinc-800 font-medium whitespace-pre-line leading-relaxed">{{ $claim->proof_description ?: $claim->claim_description }}</p>
                     </div>
 
-                    @if ($claim->proof_document_path)
+                    @php $evidenceUrls = $claim->evidence_urls; @endphp
+                    @if (! empty($evidenceUrls))
+                        <div>
+                            <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-2">Attached Proof Images ({{ count($evidenceUrls) }})</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                @foreach ($evidenceUrls as $idx => $url)
+                                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="group relative rounded-xl border border-zinc-200 overflow-hidden block aspect-square bg-zinc-100 hover:ring-2 hover:ring-black transition">
+                                        <img src="{{ $url }}" alt="Proof file {{ $idx + 1 }}" class="h-full w-full object-cover">
+                                        <span class="absolute inset-x-0 bottom-0 bg-black/75 py-1 text-center text-[10px] text-white backdrop-blur">
+                                            Evidence #{{ $idx + 1 }} ↗
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @elseif ($claim->proof_document_path)
                         <div>
                             <span class="text-[11px] font-bold uppercase text-zinc-400 block mb-2">Attached Proof Image</span>
                             <img src="{{ $claim->proof_document_url }}" alt="Verification Proof" class="max-h-64 rounded-2xl border border-zinc-200 object-contain">

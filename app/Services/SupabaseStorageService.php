@@ -87,7 +87,16 @@ class SupabaseStorageService
 
         $signedUri = $response->json('signedURL');
 
-        return $signedUri ? "{$this->url}" . $signedUri : null;
+        if (! $signedUri) {
+            return null;
+        }
+
+        // Supabase returns relative path starting with /object/sign/..., needs /storage/v1
+        if (str_starts_with($signedUri, '/object/')) {
+            return "{$this->url}/storage/v1" . $signedUri;
+        }
+
+        return "{$this->url}" . $signedUri;
     }
 
     /**
