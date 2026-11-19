@@ -12,7 +12,7 @@
                 <x-brand-logo />
             </a>
 
-            <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+            <nav class="hidden items-center gap-1 sm:flex" aria-label="Main">
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}"
                        @class([
@@ -103,7 +103,7 @@
 
                 {{-- Mobile hamburger button --}}
                 <button type="button" data-nav-toggle="mobile-menu" aria-expanded="false" aria-controls="mobile-menu"
-                        class="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 lg:hidden">
+                        class="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 sm:hidden">
                     <span class="sr-only">Toggle menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
@@ -111,10 +111,9 @@
         </div>
 
         {{-- Mobile dropdown menu --}}
-        <div id="mobile-menu" class="hidden border-t border-zinc-200 bg-white lg:hidden">
+        <div id="mobile-menu" class="hidden border-t border-zinc-200 bg-white sm:hidden">
             @auth
                 <div class="border-b border-zinc-100 px-4 py-3 bg-zinc-50">
-                    <p class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Institutional Account</p>
                     <p class="text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
                     <p class="text-xs text-zinc-600 font-medium">{{ auth()->user()->email }}</p>
                 </div>

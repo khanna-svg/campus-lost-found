@@ -36,7 +36,7 @@
             CampusBeacon
         </h1>
         <p class="mt-0.5 text-xs text-zinc-500 font-medium tracking-wide">
-            Campus Lost &amp; Found
+            Find It, Return It.
         </p>
     </div>
 

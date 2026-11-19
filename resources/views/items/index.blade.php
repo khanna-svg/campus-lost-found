@@ -18,7 +18,7 @@
         {{-- Filter & Search Row (Matching Reference Image) --}}
         <form method="GET" action="{{ route('items.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
             {{-- Left: Filter Selectors (Type & Status) --}}
-            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+            <div class="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2.5 w-full sm:w-auto">
                 {{-- Type Filter Dropdown --}}
                 <div class="relative w-full sm:w-40">
                     <select name="type"
