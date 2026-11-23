@@ -160,7 +160,8 @@ create table public.found_items (
     photo_path         varchar(500) not null,               -- path inside bucket "item-photos"
     private_details    text         not null,               -- PRIVATE: used by admin to verify the owner
     remarks            text,                                -- PRIVATE: finder's additional remarks
-    storage_location   varchar(200),                        -- where the item is physically kept (set by admin)
+    storage_location   varchar(200),                        -- where the item is physically kept
+    is_surrendered_to_office boolean not null default false, -- true: in Admin Office, false: kept by finder/student
     status             varchar(20)  not null default 'pending_review',
     needs_correction   boolean      not null default false,
     correction_note    text,
@@ -294,7 +295,7 @@ create table public.notifications (
 
     constraint notifications_type_check check (type in (
         'report_submitted', 'report_approved', 'report_rejected', 'report_correction_requested',
-        'claim_received', 'claim_info_required', 'claim_approved', 'claim_rejected',
+        'claim_received', 'claim_info_required', 'claim_response', 'claim_approved', 'claim_rejected',
         'claim_ready_for_retrieval', 'item_returned', 'announcement')),
     constraint notifications_related_type_check
         check (related_type is null or related_type in ('lost_item', 'found_item', 'claim_request')),

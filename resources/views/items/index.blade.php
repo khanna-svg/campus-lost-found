@@ -339,12 +339,35 @@
                         <label class="block text-xs font-bold text-zinc-700">Item Type</label>
                         <div class="flex items-center gap-6 pt-0.5">
                             <label class="flex items-center gap-2 text-sm font-semibold text-zinc-900 cursor-pointer">
-                                <input type="radio" name="item_type" value="lost" checked class="h-4 w-4 text-black focus:ring-black border-zinc-300">
+                                <input type="radio" name="item_type" value="lost" checked onchange="toggleModalCustody(this.value)" class="h-4 w-4 text-black focus:ring-black border-zinc-300">
                                 Lost Item
                             </label>
                             <label class="flex items-center gap-2 text-sm font-semibold text-zinc-900 cursor-pointer">
-                                <input type="radio" name="item_type" value="found" class="h-4 w-4 text-black focus:ring-black border-zinc-300">
+                                <input type="radio" name="item_type" value="found" onchange="toggleModalCustody(this.value)" class="h-4 w-4 text-black focus:ring-black border-zinc-300">
                                 Found Item
+                            </label>
+                        </div>
+                    </div>
+
+                    {{-- Item Possession (for Found items) --}}
+                    <div id="modal-found-custody-section" class="hidden space-y-2 pt-2 border-t border-zinc-100">
+                        <label class="block text-xs font-bold text-zinc-800">
+                            Item Possession / Custody <span class="text-zinc-900">*</span>
+                        </label>
+                        <div class="space-y-1.5">
+                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                                <input type="radio" name="is_surrendered" value="0" checked class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                                <div>
+                                    <span class="block text-xs font-bold text-zinc-900">In my possession (I still have it)</span>
+                                    <span class="block text-[11px] text-zinc-500">I haven't surrendered it to Admin Office. The owner will claim it directly from me.</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                                <input type="radio" name="is_surrendered" value="1" class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                                <div>
+                                    <span class="block text-xs font-bold text-zinc-900">Surrendered to Admin Office</span>
+                                    <span class="block text-[11px] text-zinc-500">I turned the physical item in to the Admin Office.</span>
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -544,6 +567,17 @@
         function closeReportModal() {
             document.getElementById('report-item-modal').classList.add('hidden');
             document.body.style.overflow = '';
+        }
+
+        function toggleModalCustody(type) {
+            const el = document.getElementById('modal-found-custody-section');
+            if (el) {
+                if (type === 'found') {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            }
         }
 
         function handleModalFilePreview(input) {

@@ -86,6 +86,37 @@
                     />
                 </div>
 
+                {{-- Item Possession / Custody --}}
+                <div class="space-y-2 pt-2 border-t border-zinc-100">
+                    <label class="block text-sm font-medium text-zinc-700">
+                        Item Possession / Custody <span class="text-zinc-900 font-bold">*</span>
+                    </label>
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                            <input type="radio"
+                                   name="is_surrendered"
+                                   value="0"
+                                   @checked(old('is_surrendered', '0') === '0')
+                                   class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                            <div>
+                                <span class="block text-xs font-bold text-zinc-900">In my possession (I still have it)</span>
+                                <span class="block text-[11px] text-zinc-500">I have not surrendered this item to the Admin Office. The rightful owner will claim and retrieve it directly from me.</span>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                            <input type="radio"
+                                   name="is_surrendered"
+                                   value="1"
+                                   @checked(old('is_surrendered') === '1')
+                                   class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                            <div>
+                                <span class="block text-xs font-bold text-zinc-900">Surrendered to Admin Office</span>
+                                <span class="block text-[11px] text-zinc-500">I turned the physical item in to the Campus Admin Office. Claims will be verified and handed over at the Admin Office.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
                 {{-- General Public Description --}}
                 <div>
                     <label for="public_description" class="mb-1.5 block text-sm font-medium text-zinc-700">

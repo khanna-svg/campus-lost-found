@@ -74,6 +74,8 @@ class ReportItemController extends Controller
             $lostItem->reviewed_at = now();
             $lostItem->save();
         } else {
+            $isSurrendered = $request->boolean('is_surrendered');
+
             $foundItem = new FoundItem();
             $foundItem->user_id = $user->id;
             $foundItem->category_id = $category->id;
@@ -84,6 +86,8 @@ class ReportItemController extends Controller
             $foundItem->location_found = $validated['location'] ?: 'Campus Area';
             $foundItem->photo_path = $photoPath;
             $foundItem->contact_info = $validated['contact_info'];
+            $foundItem->is_surrendered_to_office = $isSurrendered;
+            $foundItem->storage_location = $isSurrendered ? 'Admin Office' : 'With Finder';
             $foundItem->status = FoundItemStatus::Approved;
             $foundItem->reviewed_by = $user->id;
             $foundItem->reviewed_at = now();

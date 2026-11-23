@@ -37,6 +37,15 @@
                 <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
                     FOUND ITEM
                 </span>
+                @if ($foundItem->isSurrenderedToOffice())
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">
+                        📍 At Admin Office
+                    </span>
+                @else
+                    <span class="inline-flex items-center rounded-full bg-purple-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-purple-700">
+                        👤 In Finder's Possession
+                    </span>
+                @endif
                 @if ($foundItem->status->value === 'returned')
                     <span class="inline-flex items-center rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-zinc-700">
                         RESOLVED
@@ -129,6 +138,34 @@
                     {{ $foundItem->public_description }}
                 </div>
             </div>
+
+            {{-- Incoming Claims on this Item (Visible to Finder & Admin) --}}
+            @if (($foundItem->user_id === auth()->id() || (auth()->check() && auth()->user()->isAdmin())) && $foundItem->claimRequests->isNotEmpty())
+                <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-zinc-900">
+                            Ownership Claims on this Item ({{ $foundItem->claimRequests->count() }})
+                        </h3>
+                        <span class="text-xs text-zinc-500">Review proof submitted by students</span>
+                    </div>
+                    <div class="space-y-2">
+                        @foreach ($foundItem->claimRequests as $cr)
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-white border border-zinc-200">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-xs text-zinc-900">{{ $cr->claimant->name }}</span>
+                                        <x-status-badge :status="$cr->status" />
+                                    </div>
+                                    <span class="text-[11px] text-zinc-500 block mt-0.5">Submitted {{ $cr->created_at->format('M d, Y h:i A') }}</span>
+                                </div>
+                                <a href="{{ route('claims.show', $cr) }}" class="inline-flex items-center gap-1 self-start sm:self-auto rounded-lg bg-black px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 transition">
+                                    Review Claim →
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             {{-- Resolve Actions --}}
             @if ($isAuthorized)

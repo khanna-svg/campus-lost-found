@@ -115,13 +115,26 @@ class NotificationService
     }
 
     /**
-     * 4. New Claim Submitted (Notifies Administrators)
+     * 4. New Claim Submitted (Notifies Finder if kept by finder, and Administrators)
      */
     public function claimReceived(ClaimRequest $claim): void
     {
         $itemName = $claim->foundItem->item_name;
         $claimantName = $claim->claimant->name;
 
+        // If the item is in the finder's possession, notify the finder directly!
+        if ($claim->foundItem->isKeptByFinder()) {
+            $this->send(
+                $claim->foundItem->user_id,
+                'claim_received',
+                'New Claim on Your Found Item · ' . $itemName,
+                "{$claimantName} submitted an ownership claim for '{$itemName}' that you are currently keeping. Review their proof to coordinate the return.",
+                'claim_request',
+                $claim->id
+            );
+        }
+
+        // Also notify administrators for system awareness
         $this->notifyAdmins(
             'claim_received',
             'New Claim Submitted · ' . $itemName,
@@ -137,13 +150,18 @@ class NotificationService
     public function claimApproved(ClaimRequest $claim): AppNotification
     {
         $itemName = $claim->foundItem->item_name;
+        $isKeptByFinder = $claim->foundItem->isKeptByFinder();
+
+        $message = $isKeptByFinder
+            ? "Your claim for '{$itemName}' was approved by the finder! Check the meetup instructions to retrieve your item."
+            : "Your claim for '{$itemName}' was approved! Your item is secured and ready for pickup at the Admin Office. Please bring your school ID.";
 
         // 1. In-App Notification
         $notification = $this->send(
             $claim->claimant_id,
             'claim_approved',
             'Claim Approved · ' . $itemName,
-            "Your claim for '{$itemName}' was approved! Your item is secured and ready for pickup at the Admin Office. Please bring your school ID.",
+            $message,
             'claim_request',
             $claim->id
         );
@@ -167,12 +185,14 @@ class NotificationService
     public function claimInfoRequired(ClaimRequest $claim, string $adminMessage): AppNotification
     {
         $itemName = $claim->foundItem->item_name;
+        $isKeptByFinder = $claim->foundItem->isKeptByFinder();
+        $senderTitle = $isKeptByFinder ? 'The finder' : 'An administrator';
 
         return $this->send(
             $claim->claimant_id,
             'claim_info_required',
             'Action Needed: More Details Requested · ' . $itemName,
-            "An administrator requested additional information on your claim: {$adminMessage}",
+            "{$senderTitle} requested additional information on your claim: {$adminMessage}",
             'claim_request',
             $claim->id
         );
@@ -184,12 +204,14 @@ class NotificationService
     public function claimRejected(ClaimRequest $claim, string $reason): AppNotification
     {
         $itemName = $claim->foundItem->item_name;
+        $isKeptByFinder = $claim->foundItem->isKeptByFinder();
+        $senderTitle = $isKeptByFinder ? 'the finder' : 'an administrator';
 
         return $this->send(
             $claim->claimant_id,
             'claim_rejected',
             'Claim Not Approved · ' . $itemName,
-            "Your claim for '{$itemName}' was rejected. Reason: {$reason}",
+            "Your claim for '{$itemName}' was rejected by {$senderTitle}. Reason: {$reason}",
             'claim_request',
             $claim->id
         );

@@ -25,6 +25,8 @@ class FoundItem extends Model
         'private_details',
         'remarks',
         'storage_location',
+        'is_surrendered_to_office',
+        'contact_info',
         'status',
         'needs_correction',
         'correction_note',
@@ -38,11 +40,22 @@ class FoundItem extends Model
     {
         return [
             'date_found' => 'date',
+            'is_surrendered_to_office' => 'boolean',
             'status' => FoundItemStatus::class,
             'needs_correction' => 'boolean',
             'reviewed_at' => 'datetime',
             'archived_at' => 'datetime',
         ];
+    }
+
+    public function isSurrenderedToOffice(): bool
+    {
+        return (bool) $this->is_surrendered_to_office;
+    }
+
+    public function isKeptByFinder(): bool
+    {
+        return ! $this->is_surrendered_to_office;
     }
 
     public function user(): BelongsTo

@@ -79,6 +79,14 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function () {
     Route::post('/my-claims/{claim}/respond', [ClaimRequestController::class, 'respond'])
         ->middleware('throttle:10,1')
         ->name('claims.respond');
+    Route::post('/my-claims/{claim}/finder-approve', [ClaimRequestController::class, 'finderApprove'])
+        ->name('claims.finder-approve');
+    Route::post('/my-claims/{claim}/finder-request-info', [ClaimRequestController::class, 'finderRequestInfo'])
+        ->name('claims.finder-request-info');
+    Route::post('/my-claims/{claim}/finder-reject', [ClaimRequestController::class, 'finderReject'])
+        ->name('claims.finder-reject');
+    Route::post('/my-claims/{claim}/finder-return', [ClaimRequestController::class, 'finderRecordReturn'])
+        ->name('claims.finder-return');
 
     // In-App Notification System (Module 6 - Phase 9)
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

@@ -22,6 +22,7 @@ class StoreFoundItemRequest extends FormRequest
             'photo' => ['required', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
             'private_details' => ['required', 'string', 'max:2000'],
             'remarks' => ['nullable', 'string', 'max:1000'],
+            'is_surrendered' => ['nullable', 'in:0,1,true,false'],
         ];
     }
 

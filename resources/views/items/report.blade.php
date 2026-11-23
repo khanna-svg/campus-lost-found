@@ -50,6 +50,37 @@
                     </div>
                 </div>
 
+                {{-- Item Possession (for Found items) --}}
+                <div id="found-custody-section" class="space-y-2 pt-2 border-t border-zinc-100 {{ ($defaultType ?? 'lost') === 'found' ? '' : 'hidden' }}">
+                    <label class="block text-xs font-bold text-zinc-800">
+                        Item Possession / Custody <span class="text-zinc-900">*</span>
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-start gap-3 p-3 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                            <input type="radio"
+                                   name="is_surrendered"
+                                   value="0"
+                                   @checked(old('is_surrendered', '0') === '0')
+                                   class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                            <div>
+                                <span class="block text-xs font-bold text-zinc-900">In my possession (I still have it)</span>
+                                <span class="block text-[11px] text-zinc-500">I have not surrendered the item to the Admin Office. The owner can claim it directly from me.</span>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 rounded-xl border border-zinc-200 hover:border-black cursor-pointer bg-white transition">
+                            <input type="radio"
+                                   name="is_surrendered"
+                                   value="1"
+                                   @checked(old('is_surrendered') === '1')
+                                   class="mt-0.5 h-4 w-4 text-black focus:ring-black border-zinc-300">
+                            <div>
+                                <span class="block text-xs font-bold text-zinc-900">Surrendered to Admin Office</span>
+                                <span class="block text-[11px] text-zinc-500">I turned the physical item over to the Admin Office. Claims will be verified and handed over at the Admin Office.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
                 {{-- Title --}}
                 <div>
                     <label for="title" class="block text-xs font-bold text-zinc-800 mb-1">
@@ -203,5 +234,18 @@
             document.getElementById('preview-area').classList.add('hidden');
             document.getElementById('dropzone-prompt').classList.remove('hidden');
         }
+
+        document.querySelectorAll('input[name="item_type"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const custodySection = document.getElementById('found-custody-section');
+                if (custodySection) {
+                    if (this.value === 'found') {
+                        custodySection.classList.remove('hidden');
+                    } else {
+                        custodySection.classList.add('hidden');
+                    }
+                }
+            });
+        });
     </script>
 </x-layouts.app>

@@ -37,6 +37,8 @@ class FoundItemController extends Controller
             return back()->withInput()->with('error', 'Failed to upload photo: ' . $e->getMessage());
         }
 
+        $isSurrendered = $request->boolean('is_surrendered');
+
         $foundItem = new FoundItem();
         $foundItem->user_id = $request->user()->id;
         $foundItem->category_id = $validated['category_id'];
@@ -47,6 +49,8 @@ class FoundItemController extends Controller
         $foundItem->photo_path = $photoPath;
         $foundItem->private_details = $validated['private_details'];
         $foundItem->remarks = $validated['remarks'] ?? null;
+        $foundItem->is_surrendered_to_office = $isSurrendered;
+        $foundItem->storage_location = $isSurrendered ? 'Admin Office' : 'With Finder';
         $foundItem->status = FoundItemStatus::PendingReview;
         $foundItem->save();
 
@@ -62,6 +66,8 @@ class FoundItemController extends Controller
 
         // Private details and remarks are strictly visible only to the finder or administrators
         $isAuthorized = $user->isAdmin() || $foundItem->user_id === $user->id;
+
+        $foundItem->load(['user', 'category', 'claimRequests.claimant']);
 
         return view('found-items.show', compact('foundItem', 'isAuthorized'));
     }

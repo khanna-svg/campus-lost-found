@@ -4,6 +4,9 @@
         ['label' => 'Lost & Found', 'route' => 'items.index', 'match' => 'items.*'],
         ['label' => 'Report an item', 'route' => 'items.report.create', 'match' => 'items.report.*'],
     ];
+    if (auth()->check()) {
+        $nav[] = ['label' => 'Claims', 'route' => 'claims.index', 'match' => 'claims.*'];
+    }
 @endphp
 <x-layouts.base :title="$title">
     <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
@@ -87,6 +90,10 @@
                             </div>
 
                             <div class="py-1">
+                                <a href="{{ route('claims.index') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black" role="menuitem">
+                                    <svg class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                    Claims Management
+                                </a>
                                 <a href="{{ route('profile.show') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black" role="menuitem">
                                     <svg class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
                                     Account Profile

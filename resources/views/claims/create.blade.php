@@ -37,6 +37,33 @@
 
 
 
+        {{-- Item Custody Notice --}}
+        @if ($foundItem->isKeptByFinder())
+            <div class="rounded-2xl border border-purple-200 bg-purple-50/70 p-4 text-xs text-purple-950 flex items-start gap-3">
+                <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-purple-600 text-white font-bold shrink-0 text-xs">
+                    👤
+                </span>
+                <div>
+                    <span class="font-bold text-purple-900 block uppercase tracking-wider text-[11px]">Direct Claim to Finder</span>
+                    <p class="mt-0.5 text-purple-800 leading-relaxed">
+                        The finder (<strong>{{ $foundItem->user->name }}</strong>) still has this item in their possession and has not surrendered it to the Admin Office. Your proof will be reviewed directly by the finder so you can arrange a meetup on campus.
+                    </p>
+                </div>
+            </div>
+        @else
+            <div class="rounded-2xl border border-blue-200 bg-blue-50/70 p-4 text-xs text-blue-950 flex items-start gap-3">
+                <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-600 text-white font-bold shrink-0 text-xs">
+                    📍
+                </span>
+                <div>
+                    <span class="font-bold text-blue-900 block uppercase tracking-wider text-[11px]">Admin Office Verification</span>
+                    <p class="mt-0.5 text-blue-800 leading-relaxed">
+                        This item has been surrendered to the <strong>Admin Office</strong>. Campus administrators will verify your proof and prepare the item for physical pickup.
+                    </p>
+                </div>
+            </div>
+        @endif
+
         {{-- Claim Submission Form --}}
         <form method="POST" action="{{ route('claims.store') }}" enctype="multipart/form-data" class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 sm:p-8 space-y-6">
             @csrf

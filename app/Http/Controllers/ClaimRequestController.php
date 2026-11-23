@@ -8,26 +8,37 @@ use App\Enums\LostItemStatus;
 use App\Http\Requests\StoreClaimRequest;
 use App\Models\ClaimRequest;
 use App\Models\FoundItem;
+use App\Models\ItemReturn;
+use App\Services\NotificationService;
 use App\Services\SupabaseStorageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ClaimRequestController extends Controller
 {
     /**
-     * List all claim requests submitted by the authenticated user.
+     * List claim requests submitted by or received by the authenticated user.
      */
     public function index(Request $request): View
     {
         $user = $request->user();
 
         $claims = $user->claimRequests()
-            ->with(['foundItem.category'])
+            ->with(['foundItem.category', 'foundItem.user'])
             ->latest()
             ->paginate(10);
 
-        return view('claims.index', compact('claims'));
+        // Claims received on items reported found by this user
+        $receivedClaims = ClaimRequest::whereHas('foundItem', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->with(['foundItem.category', 'claimant', 'itemReturn'])
+            ->latest()
+            ->get();
+
+        return view('claims.index', compact('claims', 'receivedClaims'));
     }
 
     /**
@@ -85,7 +96,7 @@ class ClaimRequestController extends Controller
     public function store(
         StoreClaimRequest $request,
         SupabaseStorageService $storage,
-        \App\Services\NotificationService $notifications
+        NotificationService $notifications
     ): RedirectResponse
     {
         if ($request->user()->isAdmin()) {
@@ -112,11 +123,17 @@ class ClaimRequestController extends Controller
             'status' => ClaimRequestStatus::Pending,
         ]);
 
-        // Notify admins of new claim
+        // Load foundItem relationship
+        $claim->load('foundItem');
+
+        // Notify admins and/or finder of new claim
         $notifications->claimReceived($claim);
 
-        return redirect()->route('claims.show', $claim)
-            ->with('success', 'Your ownership claim has been submitted. Campus administrators will verify your proof.');
+        $successMsg = $claim->foundItem->isKeptByFinder()
+            ? 'Your ownership claim has been submitted directly to the finder. The finder will review your proof and contact you.'
+            : 'Your ownership claim has been submitted. Campus administrators will verify your proof.';
+
+        return redirect()->route('claims.show', $claim)->with('success', $successMsg);
     }
 
     /**
@@ -126,21 +143,28 @@ class ClaimRequestController extends Controller
     {
         $user = $request->user();
 
-        // Claimant or Admin only
-        if ($claim->claimant_id !== $user->id && ! $user->isAdmin()) {
+        // Claimant, Finder, or Admin
+        $isClaimant = $claim->claimant_id === $user->id;
+        $isFinder = $claim->foundItem->user_id === $user->id;
+        $isAdmin = $user->isAdmin();
+
+        if (! $isClaimant && ! $isFinder && ! $isAdmin) {
             abort(403, 'Unauthorized access to claim details.');
         }
 
-        $claim->load(['foundItem.category', 'lostItem', 'reviewer', 'approver', 'itemReturn.recordedBy']);
+        $claim->load(['foundItem.category', 'foundItem.user', 'lostItem', 'reviewer', 'approver', 'claimant', 'itemReturn.recordedBy']);
 
-        return view('claims.show', compact('claim'));
+        return view('claims.show', compact('claim', 'isClaimant', 'isFinder', 'isAdmin'));
     }
 
     /**
-     * Claimant response to an administrator's request for additional information.
+     * Claimant response to an information request.
      */
-    public function respond(Request $request, ClaimRequest $claim): RedirectResponse
-    {
+    public function respond(
+        Request $request,
+        ClaimRequest $claim,
+        NotificationService $notifications
+    ): RedirectResponse {
         $user = $request->user();
 
         if ($claim->claimant_id !== $user->id) {
@@ -155,7 +179,7 @@ class ClaimRequestController extends Controller
         $validated = $request->validate([
             'claimant_response' => ['required', 'string', 'min:10', 'max:2000'],
         ], [
-            'claimant_response.required' => 'Please provide the additional information requested by the administrator.',
+            'claimant_response.required' => 'Please provide the additional information requested.',
             'claimant_response.min' => 'Your response must be at least 10 characters long.',
         ]);
 
@@ -164,7 +188,170 @@ class ClaimRequestController extends Controller
             'status' => ClaimRequestStatus::UnderReview,
         ]);
 
+        // Notify finder if item is kept by finder
+        if ($claim->foundItem->isKeptByFinder()) {
+            $notifications->send(
+                $claim->foundItem->user_id,
+                'claim_response',
+                'Claimant Responded · ' . $claim->foundItem->item_name,
+                "{$user->name} submitted the requested details for their claim on '{$claim->foundItem->item_name}'.",
+                'claim_request',
+                $claim->id
+            );
+        }
+
         return redirect()->route('claims.show', $claim)
             ->with('success', 'Your response has been submitted and your claim is now under review.');
+    }
+
+    /**
+     * Finder approves claim and provides meetup / retrieval instructions.
+     */
+    public function finderApprove(
+        Request $request,
+        ClaimRequest $claim,
+        NotificationService $notifications
+    ): RedirectResponse {
+        $user = $request->user();
+
+        if ($claim->foundItem->user_id !== $user->id && ! $user->isAdmin()) {
+            abort(403, 'Only the finder or an administrator can approve this claim.');
+        }
+
+        if (in_array($claim->status, [ClaimRequestStatus::Completed, ClaimRequestStatus::Rejected])) {
+            return back()->with('error', 'This claim has already been concluded.');
+        }
+
+        $validated = $request->validate([
+            'pickup_instructions' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        $claim->update([
+            'status' => ClaimRequestStatus::Approved,
+            'approved_by' => $user->id,
+            'approved_at' => now(),
+            'pickup_instructions' => $validated['pickup_instructions'],
+        ]);
+
+        $claim->foundItem->update([
+            'status' => FoundItemStatus::Claimed,
+        ]);
+
+        $notifications->claimApproved($claim);
+
+        return redirect()->route('claims.show', $claim)
+            ->with('success', 'Claim approved! The claimant has been notified with your meetup instructions.');
+    }
+
+    /**
+     * Finder requests additional details from claimant.
+     */
+    public function finderRequestInfo(
+        Request $request,
+        ClaimRequest $claim,
+        NotificationService $notifications
+    ): RedirectResponse {
+        $user = $request->user();
+
+        if ($claim->foundItem->user_id !== $user->id && ! $user->isAdmin()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        $claim->update([
+            'status' => ClaimRequestStatus::AdditionalInformationRequired,
+            'admin_message' => $validated['message'],
+        ]);
+
+        $notifications->claimInfoRequired($claim, $validated['message']);
+
+        return redirect()->route('claims.show', $claim)
+            ->with('success', 'Information request sent to the claimant.');
+    }
+
+    /**
+     * Finder rejects claim.
+     */
+    public function finderReject(
+        Request $request,
+        ClaimRequest $claim,
+        NotificationService $notifications
+    ): RedirectResponse {
+        $user = $request->user();
+
+        if ($claim->foundItem->user_id !== $user->id && ! $user->isAdmin()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'rejection_reason' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        $claim->update([
+            'status' => ClaimRequestStatus::Rejected,
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+
+        $notifications->claimRejected($claim, $validated['rejection_reason']);
+
+        return redirect()->route('claims.show', $claim)
+            ->with('success', 'Claim has been rejected.');
+    }
+
+    /**
+     * Finder records physical return / handover to owner.
+     */
+    public function finderRecordReturn(
+        Request $request,
+        ClaimRequest $claim,
+        NotificationService $notifications
+    ): RedirectResponse {
+        $user = $request->user();
+
+        if ($claim->foundItem->user_id !== $user->id && ! $user->isAdmin()) {
+            abort(403);
+        }
+
+        if ($claim->status !== ClaimRequestStatus::Approved) {
+            return back()->with('error', 'Only an approved claim can be handed over.');
+        }
+
+        $validated = $request->validate([
+            'returned_to_name' => ['required', 'string', 'max:150'],
+            'lrn' => ['required', 'string', 'max:100'],
+            'course_year' => ['required', 'string', 'max:100'],
+            'notes' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        DB::transaction(function () use ($validated, $claim, $user, $notifications) {
+            $itemReturn = ItemReturn::create([
+                'claim_request_id' => $claim->id,
+                'found_item_id' => $claim->found_item_id,
+                'recorded_by' => $user->id,
+                'returned_to_name' => $validated['returned_to_name'],
+                'lrn' => $validated['lrn'],
+                'course_year' => $validated['course_year'],
+                'id_presented' => 'Student ID',
+                'notes' => $validated['notes'] ?? 'Handed over directly by finder',
+                'returned_at' => now(),
+            ]);
+
+            $claim->update([
+                'status' => ClaimRequestStatus::Completed,
+                'completed_at' => now(),
+            ]);
+
+            $claim->foundItem->update([
+                'status' => FoundItemStatus::Returned,
+            ]);
+
+            $notifications->itemReturned($itemReturn);
+        });
+
+        return redirect()->route('claims.show', $claim)
+            ->with('success', 'Item handover successfully recorded! This item is now marked as returned to its owner.');
     }
 }
