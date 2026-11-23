@@ -84,10 +84,14 @@ class FoundItemController extends Controller
         }
 
         if ($foundItem->status === FoundItemStatus::Returned) {
-            $foundItem->status = FoundItemStatus::Approved;
+            $foundItem->status = $foundItem->reviewed_at ? FoundItemStatus::Approved : FoundItemStatus::PendingReview;
             $foundItem->save();
             $message = 'Item marked as unresolved.';
         } else {
+            if ($foundItem->reviewed_by === null) {
+                $foundItem->reviewed_by = $user->id;
+                $foundItem->reviewed_at = now();
+            }
             $foundItem->status = FoundItemStatus::Returned;
             $foundItem->save();
 

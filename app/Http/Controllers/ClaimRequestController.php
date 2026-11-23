@@ -218,26 +218,37 @@ class ClaimRequestController extends Controller
             abort(403, 'Only the finder or an administrator can approve this claim.');
         }
 
-        if (in_array($claim->status, [ClaimRequestStatus::Completed, ClaimRequestStatus::Rejected])) {
-            return back()->with('error', 'This claim has already been concluded.');
+        if (in_array($claim->status, [ClaimRequestStatus::Approved, ClaimRequestStatus::Completed, ClaimRequestStatus::Rejected])) {
+            return back()->with('error', 'This claim has already been approved or concluded.');
+        }
+
+        $alreadyApproved = ClaimRequest::where('found_item_id', $claim->found_item_id)
+            ->whereIn('status', [ClaimRequestStatus::Approved, ClaimRequestStatus::Completed])
+            ->where('id', '!=', $claim->id)
+            ->exists();
+
+        if ($alreadyApproved) {
+            return back()->with('error', 'Another claim for this item has already been approved.');
         }
 
         $validated = $request->validate([
             'pickup_instructions' => ['required', 'string', 'min:5', 'max:1000'],
         ]);
 
-        $claim->update([
-            'status' => ClaimRequestStatus::Approved,
-            'approved_by' => $user->id,
-            'approved_at' => now(),
-            'pickup_instructions' => $validated['pickup_instructions'],
-        ]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($claim, $user, $validated, $notifications) {
+            $claim->update([
+                'status' => ClaimRequestStatus::Approved,
+                'approved_by' => $user->id,
+                'approved_at' => now(),
+                'pickup_instructions' => $validated['pickup_instructions'],
+            ]);
 
-        $claim->foundItem->update([
-            'status' => FoundItemStatus::Claimed,
-        ]);
+            $claim->foundItem->update([
+                'status' => FoundItemStatus::Claimed,
+            ]);
 
-        $notifications->claimApproved($claim);
+            $notifications->claimApproved($claim);
+        });
 
         return redirect()->route('claims.show', $claim)
             ->with('success', 'Claim approved! The claimant has been notified with your meetup instructions.');

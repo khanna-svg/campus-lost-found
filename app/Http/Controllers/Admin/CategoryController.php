@@ -33,7 +33,13 @@ class CategoryController extends Controller
             'description' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $slug = Str::slug($validated['name']);
+        $baseSlug = Str::slug($validated['name']) ?: 'category';
+        $slug = $baseSlug;
+        $counter = 1;
+        while (ItemCategory::where('slug', $slug)->exists()) {
+            $slug = "{$baseSlug}-{$counter}";
+            $counter++;
+        }
 
         ItemCategory::create([
             'name' => $validated['name'],

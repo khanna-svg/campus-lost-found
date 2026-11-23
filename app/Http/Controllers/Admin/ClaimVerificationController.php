@@ -99,6 +99,19 @@ class ClaimVerificationController extends Controller
      */
     public function approve(Request $request, ClaimRequest $claim, NotificationService $notifications): RedirectResponse
     {
+        if (in_array($claim->status, [ClaimRequestStatus::Approved, ClaimRequestStatus::Completed])) {
+            return back()->with('info', 'This claim has already been approved.');
+        }
+
+        $alreadyApproved = ClaimRequest::where('found_item_id', $claim->found_item_id)
+            ->whereIn('status', [ClaimRequestStatus::Approved, ClaimRequestStatus::Completed])
+            ->where('id', '!=', $claim->id)
+            ->exists();
+
+        if ($alreadyApproved) {
+            return back()->with('error', 'Another claim for this item has already been approved.');
+        }
+
         $pickupInstructions = trim((string) $request->input('pickup_instructions', ''));
 
         DB::transaction(function () use ($request, $claim, $pickupInstructions, $notifications) {
@@ -147,6 +160,10 @@ class ClaimVerificationController extends Controller
      */
     public function recordReturn(Request $request, ClaimRequest $claim, NotificationService $notifications): RedirectResponse
     {
+        if ($claim->status !== ClaimRequestStatus::Approved) {
+            return back()->with('error', 'Only approved claims can be marked as returned.');
+        }
+
         $validated = $request->validate([
             'returned_to_name' => ['required', 'string', 'max:150'],
             'lrn' => ['required', 'string', 'max:100'],

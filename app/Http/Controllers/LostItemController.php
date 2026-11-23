@@ -81,11 +81,15 @@ class LostItemController extends Controller
         }
 
         if ($lostItem->status === LostItemStatus::Resolved) {
-            $lostItem->status = LostItemStatus::Approved;
+            $lostItem->status = $lostItem->reviewed_at ? LostItemStatus::Approved : LostItemStatus::PendingReview;
             $lostItem->resolved_at = null;
             $lostItem->save();
             $message = 'Item marked as unresolved.';
         } else {
+            if ($lostItem->reviewed_by === null) {
+                $lostItem->reviewed_by = $user->id;
+                $lostItem->reviewed_at = now();
+            }
             $lostItem->status = LostItemStatus::Resolved;
             $lostItem->resolved_at = now();
             $lostItem->save();

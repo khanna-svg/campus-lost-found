@@ -22,6 +22,7 @@ class LostItem extends Model
         'time_lost',
         'location_last_seen',
         'photo_path',
+        'contact_info',
         'identifying_details',
         'status',
         'needs_correction',

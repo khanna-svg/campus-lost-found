@@ -56,8 +56,15 @@ class ReportItemController extends Controller
             }
         }
 
-        // Get or fallback category
-        $category = ItemCategory::first();
+        // Get or fallback category safely
+        $category = ItemCategory::where('is_active', true)->first()
+            ?? ItemCategory::first()
+            ?? ItemCategory::create([
+                'name' => 'General / Other',
+                'slug' => 'general-other',
+                'description' => 'General items',
+                'is_active' => true,
+            ]);
 
         if ($validated['item_type'] === 'lost') {
             $lostItem = new LostItem();
@@ -84,7 +91,7 @@ class ReportItemController extends Controller
             $foundItem->private_details = $validated['description'];
             $foundItem->date_found = $validated['date'];
             $foundItem->location_found = $validated['location'] ?: 'Campus Area';
-            $foundItem->photo_path = $photoPath;
+            $foundItem->photo_path = $photoPath ?: 'placeholder.jpg';
             $foundItem->contact_info = $validated['contact_info'];
             $foundItem->is_surrendered_to_office = $isSurrendered;
             $foundItem->storage_location = $isSurrendered ? 'Admin Office' : 'With Finder';

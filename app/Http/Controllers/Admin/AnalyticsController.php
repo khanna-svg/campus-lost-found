@@ -118,8 +118,8 @@ class AnalyticsController extends Controller
                         $item->date_found->format('Y-m-d'),
                         $this->sanitizeCsv($item->location_found),
                         $item->status->value ?? $item->status,
-                        $this->sanitizeCsv($item->user->name),
-                        $this->sanitizeCsv($item->user->email),
+                        $this->sanitizeCsv($item->user?->name ?? 'Campus Member'),
+                        $this->sanitizeCsv($item->user?->email ?? ''),
                         $item->created_at->toIso8601String(),
                     ]);
                 }
@@ -136,8 +136,8 @@ class AnalyticsController extends Controller
                         $item->date_lost->format('Y-m-d'),
                         $this->sanitizeCsv($item->location_last_seen),
                         $item->status->value ?? $item->status,
-                        $this->sanitizeCsv($item->user->name),
-                        $this->sanitizeCsv($item->user->email),
+                        $this->sanitizeCsv($item->user?->name ?? 'Campus Member'),
+                        $this->sanitizeCsv($item->user?->email ?? ''),
                         $item->created_at->toIso8601String(),
                     ]);
                 }
